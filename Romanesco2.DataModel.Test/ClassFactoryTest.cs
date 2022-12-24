@@ -1,5 +1,6 @@
 using Romanesco2.DataModel.Entities;
 using Romanesco2.DataModel.Factories;
+using Romanesco2.DataModel.Serialization;
 
 namespace Romanesco2.DataModel.Test;
 
@@ -38,8 +39,7 @@ public class ClassFactoryTest
         FluentAssertion.OnObject(data)
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
-                b => b.AssertType<IntModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(IntClass.Value))))));
+                b => AssertModel<IntModel>(b, nameof(IntClass.Value))));
     }
 
     [Test]
@@ -50,8 +50,7 @@ public class ClassFactoryTest
         FluentAssertion.OnObject(data)
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
-                b => b.AssertType<BoolModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(BoolClass.Value))))));
+                b => AssertModel<BoolModel>(b, nameof(BoolClass.Value))));
     }
 
     [Test]
@@ -62,8 +61,7 @@ public class ClassFactoryTest
         FluentAssertion.OnObject(data)
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
-                b => b.AssertType<StringModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(StringClass.Value))))));
+                b => AssertModel<StringModel>(b, nameof(StringClass.Value))));
     }
 
     [Test]
@@ -74,8 +72,7 @@ public class ClassFactoryTest
         FluentAssertion.OnObject(data)
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
-                b => b.AssertType<FloatModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(FloatClass.Value))))));
+                b => AssertModel<FloatModel>(b, nameof(FloatClass.Value))));
     }
 
     [Test]
@@ -86,14 +83,166 @@ public class ClassFactoryTest
         FluentAssertion.OnObject(data)
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
-                b => b.AssertType<FloatModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(ComplexClass.Float)))),
-                b => b.AssertType<StringModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(ComplexClass.String)))),
-                b => b.AssertType<BoolModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(ComplexClass.Bool)))),
-                b => b.AssertType<IntModel>()
-                    .Do(c => Assert.That(c.Title, Is.EqualTo(nameof(ComplexClass.Int))))));
+                b => AssertModel<FloatModel>(b, nameof(ComplexClass.Float)),
+                b => AssertModel<StringModel>(b, nameof(ComplexClass.String)),
+                b => AssertModel<BoolModel>(b, nameof(ComplexClass.Bool)),
+                b => AssertModel<IntModel>(b, nameof(ComplexClass.Int))));
+    }
+
+    [Test]
+    public void Intに値を読み込める()
+    {
+        var model = new IntModel()
+        {
+            Title = "Data",
+        };
+        var data = new SerializedInt()
+        {
+            Label = "Data",
+            Value = 18
+        };
+
+        var result = _aggregatedFactory!.LoadValue(model, data, _aggregatedFactory);
+
+        FluentAssertion.OnObject(result)
+            .NotNull()
+            .AssertType<IntModel>(a => a
+                .Do(b => Assert.That(b.Title, Is.EqualTo("Data")))
+                .Do(b => Assert.That(b.Data.Value, Is.EqualTo(18))));
+    }
+
+    [Test]
+    public void Intを持つクラスに値を読み込める()
+    {
+        var model = Model.Class("Root",
+            typeof(IntClass),
+            Model.Int("Value"));
+
+        var data = Serialized.Class("Root",
+            Serialized.Int("Value", 19));
+
+        var result = _aggregatedFactory!.LoadValue(model, data, _aggregatedFactory);
+
+        FluentAssertion.OnObject(result)
+            .NotNull()
+            .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
+                b => AssertValue<IntModel, int>(b, "Value", x => x.Data.Value, 19)));
+    }
+
+    [Test]
+    public void IntとFloatとStringとBoolを持つクラスに値を読み込める()
+    {
+        var model = Model.Class("Root",
+            typeof(ComplexClass),
+            Model.Int("Int"),
+            Model.Float("Float"),
+            Model.String("String"),
+            Model.Bool("Bool"));
+
+        var data = Serialized.Class("Root",
+            Serialized.Int("Int", 15),
+            Serialized.Float("Float", 0.5f),
+            Serialized.String("String", "Hoge"),
+            Serialized.Bool("Bool", true));
+
+        var result = _aggregatedFactory!.LoadValue(model, data);
+
+        FluentAssertion.OnObject(result)
+            .NotNull()
+            .AssertType<ClassModel>(a => a
+                .OnSequence(b => b.Children,
+                    b => AssertValue<IntModel, int>(b, "Int", x => x.Data.Value, 15),
+                    b => AssertValue<FloatModel, float>(b, "Float", x => x.Data.Value, 0.5f),
+                    b => AssertValue<StringModel, string>(b, "String", x => x.Data.Value, "Hoge"),
+                    b => AssertValue<BoolModel, bool>(b, "Bool", x => x.Data.Value, true)));
+    }
+    
+    [Test]
+    public void 値を読み込むときメンバーの順番はモデル側が優先()
+    {
+        var model = Model.Class("Root",
+            typeof(ComplexClass),
+            Model.Int("Int"),
+            Model.Float("Float"),
+            Model.String("String"),
+            Model.Bool("Bool"));
+
+        var data = Serialized.Class("Root",
+            Serialized.Float("Float", 0.5f),
+            Serialized.String("String", "Hoge"),
+            Serialized.Int("Int", 15),
+            Serialized.Bool("Bool", true));
+
+        var result = _aggregatedFactory!.LoadValue(model, data);
+
+        FluentAssertion.OnObject(result)
+            .NotNull()
+            .AssertType<ClassModel>(a => a
+                .OnSequence(b => b.Children,
+                    b => AssertValue<IntModel, int>(b, "Int", x => x.Data.Value, 15),
+                    b => AssertValue<FloatModel, float>(b, "Float", x => x.Data.Value, 0.5f),
+                    b => AssertValue<StringModel, string>(b, "String", x => x.Data.Value, "Hoge"),
+                    b => AssertValue<BoolModel, bool>(b, "Bool", x => x.Data.Value, true)));
+    }
+
+    [Test]
+    public void 余分な値は捨てられる()
+    {
+        var model = Model.Class("Root",
+            typeof(ComplexClass),
+            Model.Int("Int1"));
+
+        var data = Serialized.Class("Root",
+            Serialized.Int("Int1", 99),
+            Serialized.Int("Int2", 88));
+
+        var result = _aggregatedFactory!.LoadValue(model, data);
+
+        FluentAssertion.OnObject(result).NotNull().AssertType<ClassModel>(a => a
+            .OnSequence(b => b.Children,
+                b => b.AssertType<IntModel>()));
+    }
+
+    [Test]
+    public void 足りないメンバーには規定値が入る()
+    {
+        var model = Model.Class("Root",
+            typeof(ComplexClass),
+            Model.Int("Int"),
+            Model.Bool("Bool"),
+            Model.String("String"),
+            Model.Float("Float"),
+            Model.Int("X"));
+
+        var data = Serialized.Class("Root",
+            Serialized.Int("X", 11));
+
+        var result = _aggregatedFactory!.LoadValue(model, data);
+
+        FluentAssertion.OnObject(result).NotNull().AssertType<ClassModel>(a => a
+            .OnSequence(b => b.Children,
+                b => AssertValue<IntModel, int>(b, "Int", x => x.Data.Value, default),
+                b => AssertValue<BoolModel, bool>(b, "Bool", x => x.Data.Value, default),
+                b => AssertValue<StringModel, string>(b, "String", x => x.Data.Value, ""),
+                b => AssertValue<FloatModel, float>(b, "Float", x => x.Data.Value, default),
+                b => AssertValue<IntModel, int>(b, "X", x => x.Data.Value, 11)));
+    }
+
+    private static void AssertModel<T>(FluentAssertionContext<IDataModel> data, string title) where T : IDataModel
+    {
+        data.AssertType<T>(a => Assert.That(a.Context.Title, Is.EqualTo(title)));
+    }
+
+    private static void AssertValue<T, TValue>(
+        FluentAssertionContext<IDataModel> data,
+        string title,
+        Func<T, TValue> selector,
+        TValue expected)
+        where T : IDataModel
+    {
+        data.AssertType<T>(a => a
+            .Do(b => Assert.That(b.Title, Is.EqualTo(title)))
+            .Do(b => Assert.That(selector(b), Is.EqualTo(expected))));
     }
 
     private class EmptyClass
@@ -126,5 +275,72 @@ public class ClassFactoryTest
         public string String { get; set; }
         public bool Bool { get; set; }
         public int Int { get; set; }
+    }
+}
+
+
+internal static class Model
+{
+    public static ClassModel Class(string title, Type type, params IDataModel[] children)
+    {
+        return new ClassModel()
+        {
+            Title = title,
+            TypeId = new TypeId(type),
+            Children = children
+        };
+    }
+
+    public static IntModel Int(string title) => new() { Title = title };
+    public static BoolModel Bool(string title) => new() { Title = title };
+    public static StringModel String(string title) => new() { Title = title };
+    public static FloatModel Float(string title) => new() { Title = title };
+}
+    
+internal static class Serialized
+{
+    public static SerializedClass Class(string label, params SerializedData[] children)
+    {
+        return new SerializedClass()
+        {
+            Label = label,
+            Children = children
+        };
+    }
+
+    public static SerializedInt Int(string label, int value)
+    {
+        return new SerializedInt()
+        {
+            Label = label,
+            Value = value
+        };
+    }
+
+    public static SerializedBool Bool(string label, bool value)
+    {
+        return new()
+        {
+            Label = label,
+            Value = value
+        };
+    }
+
+    public static SerializedString String(string label, string value)
+    {
+        return new SerializedString()
+        {
+            Label = label,
+            Value = value
+        };
+    }
+
+    public static SerializedFloat Float(string label, float value)
+    {
+        return new SerializedFloat()
+        {
+            Label = label,
+            Value = value
+        };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Romanesco2.DataModel.Entities;
+using Romanesco2.DataModel.Serialization;
 
 namespace Romanesco2.DataModel.Factories;
 
@@ -26,6 +27,30 @@ internal class AggregatedFactory : IModelFactory
         if (ClassFactory.LoadType(title, type, loader) is { } data2)
         {
             return data2;
+        }
+
+        return null;
+    }
+
+    public IDataModel LoadValue(IDataModel target, SerializedData data)
+    {
+        return LoadValue(target, data, this)
+            ?? throw new Exception();
+    }
+
+    public IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader)
+    {
+        foreach (var factory in Factories)
+        {
+            if (factory.LoadValue(target, data, loader) is { } result)
+            {
+                return result;
+            }
+        }
+
+        if (ClassFactory.LoadValue(target, data, loader) is { } result2)
+        {
+            return result2;
         }
 
         return null;

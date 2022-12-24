@@ -18,6 +18,18 @@ internal static class Helpers
         };
     }
 
+    public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source)
+        where T : class
+    {
+        foreach (var item in source)
+        {
+            if (item is not null)
+            {
+                yield return item;
+            }
+        }
+    }
+
     private class FilterNullObservable<T> : IObservable<T>
     {
         public required IObservable<T?> Source { private get; init; }

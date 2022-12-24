@@ -12,7 +12,13 @@ internal abstract class PrimitiveModel<T> : IDataModel
 
     protected PrimitiveModel(string initialText)
     {
-        TextOfValue = Data.Select(x => x.ToString())
+        if (Data is ReactiveProperty<string> str)
+        {
+            str.Value = initialText;
+        }
+
+        TextOfValue = Data
+            .Select(x => x.ToString())
             .FilterNull()
             .ToReadOnlyReactiveProperty(initialText);
     }

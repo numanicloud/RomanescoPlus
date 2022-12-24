@@ -1,4 +1,5 @@
 ﻿using Romanesco2.DataModel.Entities;
+using Romanesco2.DataModel.Serialization;
 
 namespace Romanesco2.DataModel.Factories;
 
@@ -28,6 +29,41 @@ internal class PrimitiveFactory : IModelFactory
             return new FloatModel()
             {
                 Title = title
+            };
+
+        return null;
+    }
+
+    public IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader)
+    {
+        if (target.Title != data.Label) return null;
+
+        if (target is IntModel iModel && data is SerializedInt iData)
+            return new IntModel()
+            {
+                Title = iModel.Title,
+                Data = { Value = iData.Value },
+            };
+
+        if (target is BoolModel bModel && data is SerializedBool bData)
+            return new BoolModel()
+            {
+                Title = bModel.Title,
+                Data = { Value = bData.Value }
+            };
+        
+        if (target is StringModel sModel && data is SerializedString sData)
+            return new StringModel()
+            {
+                Title = sModel.Title,
+                Data = { Value = sData.Value }
+            };
+
+        if (target is FloatModel fModel && data is SerializedFloat fData)
+            return new FloatModel()
+            {
+                Title = fModel.Title,
+                Data = { Value = fData.Value }
             };
 
         return null;
