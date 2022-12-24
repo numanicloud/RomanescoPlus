@@ -34,7 +34,7 @@ internal class ClassFactory : IModelFactory
             Children = model.Children
                 .Select(x => serialized.Children.Select(y => loader.LoadValue(x, y, loader))
                     .FilterNull()
-                    .FirstOrDefault() ?? x)    // セマンティクス的にはCloneすべき
+                    .FirstOrDefault() ?? x.Clone())
                 .ToArray()
         };
     }

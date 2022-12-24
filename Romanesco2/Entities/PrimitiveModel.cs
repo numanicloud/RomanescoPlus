@@ -22,4 +22,6 @@ internal abstract class PrimitiveModel<T> : IDataModel
             .FilterNull()
             .ToReadOnlyReactiveProperty(initialText);
     }
+
+    public abstract IDataModel Clone();
 }

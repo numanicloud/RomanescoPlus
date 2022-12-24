@@ -44,4 +44,14 @@ internal class ClassModel : IDataModel
     {
         TextOfValue = new ReactiveProperty<string>();
     }
+
+    public IDataModel Clone()
+    {
+        return new ClassModel()
+        {
+            Title = Title,
+            TypeId = TypeId,
+            Children = Children.Select(x => x.Clone()).ToArray(),
+        };
+    }
 }
