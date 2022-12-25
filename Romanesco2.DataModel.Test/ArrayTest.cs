@@ -1,6 +1,6 @@
 ﻿using Romanesco2.DataModel.Entities;
 using Romanesco2.DataModel.Factories;
-using Romanesco2.DataModel.Test.Fluent;
+using Romanesco2.DataModel.Test.Structural;
 
 namespace Romanesco2.DataModel.Test;
 
@@ -27,15 +27,22 @@ internal class ArrayTest
     {
         var model = _aggregatedFactory!.LoadType(typeof(ClassWithArray));
 
-        model.OnObject().NotNull().AssertType<ClassModel>(out var root);
-        using (var members = root.AssertSequence(x => x.Children))
-        {
-            members.Next().AssertType<ArrayModel>(out var array);
-            array.AssertEmpty(x => x.Items.ToArray());
-            array.Equals("Ints", x => x.Title);
+        model.BeginAssertion()
+            .NotNull()
+            .Type<ClassModel>()
+            .Extract(out var root);
 
-            array.OnObject(x => x.Prototype).AssertType<IntModel>(out var integer);
-            integer.Equals("Prototype(Ints)", x => x.Title);
+        using (var members = root.Sequence(x => x.Children))
+        {
+            members.Next()
+                .Type<ArrayModel>()
+                .Empty(x => x.Items.ToArray())
+                .Equal("Ints", x => x.Title)
+                .Extract(out var array);
+
+            array.Select(x => x.Prototype)
+                .Type<IntModel>()
+                .Equal("Prototype(Ints)", x => x.Title);
         }
     }
 
