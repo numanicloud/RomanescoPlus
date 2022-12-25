@@ -35,3 +35,8 @@ public class SerializedClass : SerializedData
 {
     public SerializedData[] Children { get; set; }
 }
+
+public class SerializedArray : SerializedData
+{
+    public SerializedData[] Items { get; set; }
+}

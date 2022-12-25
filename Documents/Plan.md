@@ -61,6 +61,30 @@ Listモデルはその子要素たちにアクセスする際、インデクサ�
 
 各Modelクラスは `LoadValue` メソッドを持ち、Serializedクラスのデータを読み込む方法を心得ている。
 
+## テスト
+
+構造のテストをしやすくしたい。以下のような書き方ができるとどうか：
+
+```csharp
+model.BeginAssertion()
+    .NotNull()
+    .AssertType<ClassModel>()
+    .Extract(out var root);
+    
+using (var members = root.AssertSequence(x => x.Children))
+{
+    members.Next()
+        .AssertType<ArrayModel>()
+        .AssertEmpty(x => x.Items.ToArray());
+        .Equals("Ints", x => x.Title)
+        .Extract(out var array);
+
+    array.Select(x => x.Prototype)
+        .AssertType<IntModel>()
+        .Equals("Prototype(Ints)", x => x.Title);
+}
+```
+
 # ロードマップ
 
 ## データを解析できるようにする

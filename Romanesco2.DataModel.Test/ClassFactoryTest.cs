@@ -1,6 +1,7 @@
 using Romanesco2.DataModel.Entities;
 using Romanesco2.DataModel.Factories;
 using Romanesco2.DataModel.Serialization;
+using Romanesco2.DataModel.Test.Fluent;
 
 namespace Romanesco2.DataModel.Test;
 
@@ -228,6 +229,19 @@ public class ClassFactoryTest
                 b => AssertValue<IntModel, int>(b, "X", x => x.Data.Value, 11)));
     }
 
+    [Test]
+    public void 二重になっているクラスを読み込める()
+    {
+        var model = _aggregatedFactory!.LoadType(typeof(SecondClass));
+
+        FluentAssertion.OnObject(model).NotNull().AssertType<ClassModel>(a => a
+            .OnSequence(b => b.Children,
+                b => b.AssertType<ClassModel>(c => c
+                    .OnSequence(d => d.Children,
+                        d => AssertModel<IntModel>(d, "X"))
+                    .Do(d => Assert.That(d.Title, Is.EqualTo("First"))))));
+    }
+
     private static void AssertModel<T>(FluentAssertionContext<IDataModel> data, string title) where T : IDataModel
     {
         data.AssertType<T>(a => Assert.That(a.Context.Title, Is.EqualTo(title)));
@@ -275,5 +289,15 @@ public class ClassFactoryTest
         public string String { get; set; }
         public bool Bool { get; set; }
         public int Int { get; set; }
+    }
+
+    private class FirstClass
+    {
+        public int X { get; set; }
+    }
+
+    private class SecondClass
+    {
+        public FirstClass First { get; set; }
     }
 }
