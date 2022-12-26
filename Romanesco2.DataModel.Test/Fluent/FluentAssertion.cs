@@ -1,4 +1,4 @@
-﻿namespace Romanesco2.DataModel.Test.Fluent;
+﻿namespace Romanesco.DataModel.Test.Fluent;
 
 internal static class FluentAssertion
 {

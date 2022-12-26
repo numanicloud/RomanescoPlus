@@ -1,6 +1,6 @@
-using Romanesco2.DataModel.Entities;
+using Romanesco.DataModel.Entities;
 
-namespace Romanesco2.DataModel.Test.Domain;
+namespace Romanesco.DataModel.Test.Domain;
 
 internal static class Model
 {

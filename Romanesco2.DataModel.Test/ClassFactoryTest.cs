@@ -1,10 +1,10 @@
-using Romanesco2.DataModel.Entities;
-using Romanesco2.DataModel.Factories;
-using Romanesco2.DataModel.Serialization;
-using Romanesco2.DataModel.Test.Domain;
-using Romanesco2.DataModel.Test.Fluent;
+using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Factories;
+using Romanesco.DataModel.Serialization;
+using Romanesco.DataModel.Test.Domain;
+using Romanesco.DataModel.Test.Fluent;
 
-namespace Romanesco2.DataModel.Test;
+namespace Romanesco.DataModel.Test;
 
 public class ClassFactoryTest
 {
@@ -28,7 +28,7 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(EmptyClass));
 
-        FluentAssertion.OnObject(data)
+        data.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children));
     }
@@ -38,7 +38,7 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(IntClass));
 
-        FluentAssertion.OnObject(data)
+        data.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
                 b => AssertModel<IntModel>(b, nameof(IntClass.Value))));
@@ -49,7 +49,7 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(BoolClass));
 
-        FluentAssertion.OnObject(data)
+        data.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
                 b => AssertModel<BoolModel>(b, nameof(BoolClass.Value))));
@@ -60,7 +60,7 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(StringClass));
 
-        FluentAssertion.OnObject(data)
+        data.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
                 b => AssertModel<StringModel>(b, nameof(StringClass.Value))));
@@ -71,7 +71,7 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(FloatClass));
 
-        FluentAssertion.OnObject(data)
+        data.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
                 b => AssertModel<FloatModel>(b, nameof(FloatClass.Value))));
@@ -82,7 +82,7 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(ComplexClass));
 
-        FluentAssertion.OnObject(data)
+        data.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
                 b => AssertModel<FloatModel>(b, nameof(ComplexClass.Float)),
@@ -105,7 +105,7 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data, _aggregatedFactory);
 
-        FluentAssertion.OnObject(result)
+        result.OnObject()
             .NotNull()
             .AssertType<IntModel>(a => a
                 .Do(b => Assert.That(b.Title, Is.EqualTo("Data")))
@@ -123,7 +123,7 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data, _aggregatedFactory);
 
-        FluentAssertion.OnObject(result)
+        result.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a.OnSequence(b => b.Children,
                 b => AssertValue<IntModel, int>(b, "Value", x => x.Data.Value, 19)));
@@ -146,7 +146,7 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
-        FluentAssertion.OnObject(result)
+        result.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a
                 .OnSequence(b => b.Children,
@@ -173,7 +173,7 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
-        FluentAssertion.OnObject(result)
+        result.OnObject()
             .NotNull()
             .AssertType<ClassModel>(a => a
                 .OnSequence(b => b.Children,
@@ -195,7 +195,7 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
-        FluentAssertion.OnObject(result).NotNull().AssertType<ClassModel>(a => a
+        result.OnObject().NotNull().AssertType<ClassModel>(a => a
             .OnSequence(b => b.Children,
                 b => b.AssertType<IntModel>()));
     }
@@ -215,7 +215,7 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
-        FluentAssertion.OnObject(result).NotNull().AssertType<ClassModel>(a => a
+        result.OnObject().NotNull().AssertType<ClassModel>(a => a
             .OnSequence(b => b.Children,
                 b => AssertValue<IntModel, int>(b, "Int", x => x.Data.Value, default),
                 b => AssertValue<BoolModel, bool>(b, "Bool", x => x.Data.Value, default),
@@ -229,7 +229,7 @@ public class ClassFactoryTest
     {
         var model = _aggregatedFactory!.LoadType(typeof(SecondClass));
 
-        FluentAssertion.OnObject(model).NotNull().AssertType<ClassModel>(a => a
+        model.OnObject().NotNull().AssertType<ClassModel>(a => a
             .OnSequence(b => b.Children,
                 b => b.AssertType<ClassModel>(c => c
                     .OnSequence(d => d.Children,

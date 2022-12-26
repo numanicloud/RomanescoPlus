@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework.Constraints;
 
-namespace Romanesco2.DataModel.Test.Fluent;
+namespace Romanesco.DataModel.Test.Fluent;
 
 internal class FluentAssertionContext<T>
 {

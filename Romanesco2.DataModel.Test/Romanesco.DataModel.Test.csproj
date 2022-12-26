@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Romanesco2\Romanesco2.DataModel.csproj" />
+    <ProjectReference Include="..\Romanesco2\Romanesco.DataModel.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reactive;
 using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Romanesco2.DataModel.Factories;
-using Romanesco2.DataModel.Serialization;
+using Romanesco.DataModel.Factories;
+using Romanesco.DataModel.Serialization;
 
-namespace Romanesco2.DataModel.Entities;
+namespace Romanesco.DataModel.Entities;
 
 internal class ArrayModel : IDataModel
 {

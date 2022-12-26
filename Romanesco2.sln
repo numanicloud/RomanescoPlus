@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Romanesco2.DataModel", "Romanesco2\Romanesco2.DataModel.csproj", "{D1E231E1-9F40-47BA-B04A-0BC9E455707D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romanesco.DataModel", "Romanesco2\Romanesco.DataModel.csproj", "{D1E231E1-9F40-47BA-B04A-0BC9E455707D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Romanesco2.DataModel.Test", "Romanesco2.DataModel.Test\Romanesco2.DataModel.Test.csproj", "{5130B6FE-58CA-4750-A9B6-D1BFA76B4ADF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romanesco.DataModel.Test", "Romanesco2.DataModel.Test\Romanesco.DataModel.Test.csproj", "{5130B6FE-58CA-4750-A9B6-D1BFA76B4ADF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

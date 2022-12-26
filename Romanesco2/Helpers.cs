@@ -1,7 +1,7 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 
-namespace Romanesco2.DataModel;
+namespace Romanesco.DataModel;
 
 internal static class Helpers
 {

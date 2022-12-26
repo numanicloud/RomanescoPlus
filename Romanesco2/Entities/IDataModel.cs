@@ -1,6 +1,6 @@
 ﻿using Reactive.Bindings;
 
-namespace Romanesco2.DataModel.Entities;
+namespace Romanesco.DataModel.Entities;
 
 internal interface IDataModel
 {

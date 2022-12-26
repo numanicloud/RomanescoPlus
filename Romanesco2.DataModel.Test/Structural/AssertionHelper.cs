@@ -1,5 +1,5 @@
 ﻿
-namespace Romanesco2.DataModel.Test.Structural;
+namespace Romanesco.DataModel.Test.Structural;
 
 internal static class AssertionHelper
 {

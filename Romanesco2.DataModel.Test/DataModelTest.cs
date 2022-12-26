@@ -1,6 +1,6 @@
-﻿using Romanesco2.DataModel.Entities;
+﻿using Romanesco.DataModel.Entities;
 
-namespace Romanesco2.DataModel.Test;
+namespace Romanesco.DataModel.Test;
 
 internal class DataModelTest
 {

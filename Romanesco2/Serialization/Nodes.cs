@@ -1,4 +1,4 @@
-﻿namespace Romanesco2.DataModel.Serialization;
+﻿namespace Romanesco.DataModel.Serialization;
 
 public abstract class SerializedData
 {

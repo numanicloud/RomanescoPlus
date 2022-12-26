@@ -5,5 +5,5 @@ global using System.Text;
 global using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Romanesco2.DataModel.Test")]
+[assembly: InternalsVisibleTo("Romanesco.DataModel.Test")]
 

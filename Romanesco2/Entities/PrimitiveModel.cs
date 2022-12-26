@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Linq;
 using Reactive.Bindings;
 
-namespace Romanesco2.DataModel.Entities;
+namespace Romanesco.DataModel.Entities;
 
 internal abstract class PrimitiveModel<T> : IDataModel
     where T : notnull

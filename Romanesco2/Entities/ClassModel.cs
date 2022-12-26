@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Linq;
 using Reactive.Bindings;
 
-namespace Romanesco2.DataModel.Entities;
+namespace Romanesco.DataModel.Entities;
 
 internal class ClassModel : IDataModel
 {

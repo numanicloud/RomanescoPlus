@@ -1,6 +1,6 @@
-using Romanesco2.DataModel.Serialization;
+using Romanesco.DataModel.Serialization;
 
-namespace Romanesco2.DataModel.Test.Domain;
+namespace Romanesco.DataModel.Test.Domain;
 
 internal static class Serialized
 {

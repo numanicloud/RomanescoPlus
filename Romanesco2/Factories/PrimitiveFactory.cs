@@ -1,7 +1,7 @@
-﻿using Romanesco2.DataModel.Entities;
-using Romanesco2.DataModel.Serialization;
+﻿using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Serialization;
 
-namespace Romanesco2.DataModel.Factories;
+namespace Romanesco.DataModel.Factories;
 
 internal class PrimitiveFactory : IModelFactory
 {

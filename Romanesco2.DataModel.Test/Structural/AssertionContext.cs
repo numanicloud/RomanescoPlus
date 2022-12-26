@@ -1,4 +1,4 @@
-﻿namespace Romanesco2.DataModel.Test.Structural;
+﻿namespace Romanesco.DataModel.Test.Structural;
 
 internal record AssertionContext<TActual>(TActual Actual)
 {
