@@ -1,6 +1,7 @@
 using Romanesco2.DataModel.Entities;
 using Romanesco2.DataModel.Factories;
 using Romanesco2.DataModel.Serialization;
+using Romanesco2.DataModel.Test.Domain;
 using Romanesco2.DataModel.Test.Fluent;
 
 namespace Romanesco2.DataModel.Test;
