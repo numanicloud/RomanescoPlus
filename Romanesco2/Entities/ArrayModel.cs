@@ -15,6 +15,7 @@ internal class ArrayModel : IDataModel
     public IReadOnlyReactiveProperty<string> TextOfValue { get; }
     public ReadOnlyObservableCollection<IDataModel> Items { get; }
     public required IDataModel Prototype { get; init; }
+    public required TypeId ElementType { get; init; }
 
     public ArrayModel()
     {
@@ -66,7 +67,8 @@ internal class ArrayModel : IDataModel
         var result = new ArrayModel()
         {
             Title = title ?? Title,
-            Prototype = Prototype.Clone()
+            Prototype = Prototype.Clone(),
+            ElementType = ElementType
         };
 
         foreach (var child in Items)

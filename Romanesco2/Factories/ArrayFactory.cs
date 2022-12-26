@@ -14,6 +14,7 @@ internal class ArrayFactory : IModelFactory
             Title = title,
             Prototype = loader.LoadType($"Prototype({title})", elementType, loader)
                 ?? throw new Exception(),
+            ElementType = new TypeId(elementType)
         };
     }
 
@@ -26,11 +27,29 @@ internal class ArrayFactory : IModelFactory
         {
             Title = target.Title,
             Prototype = model.Prototype.Clone(),
+            ElementType = model.ElementType,
         };
 
         foreach (var item in serialized.Items)
         {
             result.Add(item, loader);
+        }
+
+        return result;
+    }
+
+    public object? Decode(IDataModel source, Type targetType, IModelFactory decoder)
+    {
+        if (source is not ArrayModel model
+            || targetType.GetElementType() is not { } elementType
+            || new TypeId(elementType) != model.ElementType) return null;
+
+        var result = Array.CreateInstance(elementType, model.Items.Count);
+        foreach (var (item, i) in model.Items.Select((x, i) => (x, i)))
+        {
+            result.SetValue(decoder.Decode(item, elementType, decoder)
+                    ?? throw new InvalidOperationException(),
+                i);
         }
 
         return result;

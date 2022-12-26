@@ -7,4 +7,5 @@ internal interface IModelFactory
 {
     IDataModel? LoadType(string title, Type type, IModelFactory loader);
     IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader);
+    object? Decode(IDataModel source, Type targetType, IModelFactory decoder);
 }

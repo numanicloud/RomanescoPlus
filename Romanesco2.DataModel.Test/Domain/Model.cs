@@ -14,13 +14,14 @@ internal static class Model
         };
     }
 
-    public static ArrayModel Array<T>(string title, T prototype, params Action<T>[] setup)
+    public static ArrayModel Array<T>(string title, Type type, T prototype, params Action<T>[] setup)
         where T : IDataModel
     {
         var array = new ArrayModel()
         {
             Title = title,
             Prototype = prototype,
+            ElementType = new TypeId(type)
         };
 
         foreach (var action in setup)

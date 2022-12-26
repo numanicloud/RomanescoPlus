@@ -143,7 +143,7 @@ internal class ArrayTest
     [Test]
     public void 配列に値を読み込める()
     {
-        var model = Model.Array("List", Model.Int("Item(List)"));
+        var model = Model.Array("List", typeof(int), Model.Int("Item(List)"));
 
         var serialized = Serialized.Array(
             Serialized.Int(2),

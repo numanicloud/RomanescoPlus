@@ -50,4 +50,22 @@ internal class ClassFactory : IModelFactory
                 : null;
         }
     }
+
+    public object? Decode(IDataModel source, Type targetType, IModelFactory decoder)
+    {
+        if (source is not ClassModel model
+            || new TypeId(targetType) != model.TypeId) return null;
+
+        var instance = Activator.CreateInstance(targetType);
+
+        foreach (var child in model.Children)
+        {
+            if (targetType.GetProperty(child.Title) is not { } p)
+                throw new InvalidOperationException();
+
+            p.SetValue(instance, decoder.Decode(child, p.PropertyType, decoder));
+        }
+
+        return instance;
+    }
 }

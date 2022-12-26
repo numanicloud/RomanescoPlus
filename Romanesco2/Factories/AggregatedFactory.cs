@@ -57,4 +57,28 @@ internal class AggregatedFactory : IModelFactory
 
         return null;
     }
+
+    public object Decode(IDataModel source, Type targetType)
+    {
+        return Decode(source, targetType, this)
+            ?? throw new Exception();
+    }
+
+    public object? Decode(IDataModel source, Type targetType, IModelFactory decoder)
+    {
+        foreach (var factory in Factories)
+        {
+            if (factory.Decode(source, targetType, decoder) is { } result)
+            {
+                return result;
+            }
+        }
+
+        if (ClassFactory.Decode(source, targetType, decoder) is { } result2)
+        {
+            return result2;
+        }
+
+        return null;
+    }
 }
