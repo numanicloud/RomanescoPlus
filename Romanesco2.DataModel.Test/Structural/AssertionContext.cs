@@ -33,6 +33,12 @@ internal record AssertionContext<TActual>(TActual Actual)
         return this;
     }
 
+    public AssertionContext<TActual> EqualsTo(TActual expected)
+    {
+        Assert.That(Actual, Is.EqualTo(expected));
+        return this;
+    }
+
     public AssertionContext<T> Select<T>(Func<TActual, T> selector)
     {
         return new AssertionContext<T>(selector(Actual));
