@@ -6,11 +6,11 @@ internal class FloatModel : PrimitiveModel<float>
     {
     }
 
-    public override IDataModel Clone()
+    public override IDataModel Clone(string? title)
     {
         return new FloatModel()
         {
-            Title = Title,
+            Title = title ?? Title,
             Data = { Value = Data.Value }
         };
     }

@@ -26,7 +26,7 @@ internal static class Helpers
         }
     }
 
-    public static IObservable<Unit> Discard<T>(this IObservable<T> source)
+    public static IObservable<Unit> DiscardValue<T>(this IObservable<T> source)
     {
         return source.Select(_ => Unit.Default);
     }

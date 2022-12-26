@@ -5,12 +5,14 @@ namespace Romanesco2.DataModel.Factories;
 
 internal class AggregatedFactory : IModelFactory
 {
+    public const string RootTitle = "Root";
+
     public required ClassFactory ClassFactory { private get; init; }
     public required IModelFactory[] Factories { private get; init; }
 
     public IDataModel LoadType(Type type)
     {
-        return ClassFactory.LoadType("Root", type, this)
+        return ClassFactory.LoadType(RootTitle, type, this)
             ?? throw new Exception();
     }
 

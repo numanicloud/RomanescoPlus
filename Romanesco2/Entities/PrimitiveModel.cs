@@ -23,5 +23,5 @@ internal abstract class PrimitiveModel<T> : IDataModel
             .ToReadOnlyReactiveProperty(initialText);
     }
 
-    public abstract IDataModel Clone();
+    public abstract IDataModel Clone(string? title);
 }

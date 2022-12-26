@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -20,19 +21,27 @@ internal class ArrayModel : IDataModel
     {
         Items = new ReadOnlyObservableCollection<IDataModel>(_items);
 
-        var reactive = Items.ToReadOnlyReactiveCollection(x => x.TextOfValue);
-        TextOfValue = Observable.Merge(reactive.ObserveAddChanged().Discard(),
-                reactive.ObserveMoveChanged().Discard(),
-                reactive.ObserveRemoveChanged().Discard(),
-                reactive.ObserveReplaceChanged().Discard(),
-                reactive.ObserveResetChanged())
+        var collectionChanged = _items.ObserveAddChanged().DiscardValue()
+            .Merge(_items.ObserveMoveChanged().DiscardValue())
+            .Merge(_items.ObserveRemoveChanged().DiscardValue())
+            .Merge(_items.ObserveReplaceChanged().DiscardValue())
+            .Merge(_items.ObserveResetChanged())
+            .Publish();
+        var itemUpdated = collectionChanged
+            .SelectMany(_ => Items.Select(y => y.TextOfValue).Merge())
+            .DiscardValue();
+
+        TextOfValue = collectionChanged
+            .Merge(itemUpdated)
             .Select(_ => "[" + string.Join(", ", Items.Select(x => x.TextOfValue.Value)) + "]")
             .ToReadOnlyReactiveProperty("[]");
     }
 
-    public void New()
+    public IDataModel New()
     {
-        _items.Add(Prototype.Clone());
+        var item = Prototype.Clone($"Item({Title})");
+        _items.Add(item);
+        return item;
     }
 
     public void Move(int index, int newIndex)
@@ -54,11 +63,11 @@ internal class ArrayModel : IDataModel
         }
     }
 
-    public IDataModel Clone()
+    public IDataModel Clone(string? title = null)
     {
         var result = new ArrayModel()
         {
-            Title = Title,
+            Title = title ?? Title,
             Prototype = Prototype.Clone()
         };
 

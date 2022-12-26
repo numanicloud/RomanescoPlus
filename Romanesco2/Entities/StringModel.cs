@@ -6,12 +6,8 @@ internal class StringModel : PrimitiveModel<string>
     {
     }
 
-    public override IDataModel Clone()
+    public override IDataModel Clone(string? title)
     {
-        return new StringModel()
-        {
-            Title = Title,
-            Data = { Value = Data.Value }
-        };
+        return new StringModel() { Title = title ?? Title, Data = { Value = Data.Value } };
     }
 }

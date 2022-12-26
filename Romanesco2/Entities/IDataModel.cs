@@ -6,5 +6,5 @@ internal interface IDataModel
 {
     string Title { get; }
     IReadOnlyReactiveProperty<string> TextOfValue { get; }
-    IDataModel Clone();
+    IDataModel Clone(string? title = null);
 }

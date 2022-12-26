@@ -6,11 +6,11 @@ internal class BoolModel : PrimitiveModel<bool>
     {
     }
 
-    public override IDataModel Clone()
+    public override IDataModel Clone(string? title)
     {
         return new BoolModel()
         {
-            Title = Title,
+            Title = title ?? Title,
             Data = { Value = Data.Value }
         };
     }

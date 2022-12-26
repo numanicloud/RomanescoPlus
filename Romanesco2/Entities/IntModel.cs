@@ -6,12 +6,8 @@ internal class IntModel : PrimitiveModel<int>
     {
     }
 
-    public override IDataModel Clone()
+    public override IDataModel Clone(string? title)
     {
-        return new IntModel()
-        {
-            Title = Title,
-            Data = { Value = Data.Value }
-        };
+        return new IntModel() { Title = title ?? Title, Data = { Value = Data.Value } };
     }
 }

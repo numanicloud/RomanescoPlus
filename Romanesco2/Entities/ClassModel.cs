@@ -3,18 +3,6 @@ using Reactive.Bindings;
 
 namespace Romanesco2.DataModel.Entities;
 
-internal record TypeId
-{
-    public string Name { get; }
-    public string MetadataName { get; }
-
-    public TypeId(Type type)
-    {
-        Name = type.Name;
-        MetadataName = type.AssemblyQualifiedName ?? "";
-    }
-}
-
 internal class ClassModel : IDataModel
 {
     private readonly IDataModel[] _children = Array.Empty<IDataModel>();
@@ -34,7 +22,7 @@ internal class ClassModel : IDataModel
                 .Select(_ =>
                 {
                     var records = _children.Select(x => $"{x.Title} = {x.TextOfValue.Value}");
-                    return TypeId.Name + " { " + string.Join(", ", records) + " }";
+                    return "{ " + string.Join(", ", records) + " }";
                 })
                 .ToReadOnlyReactiveProperty("");
         }
@@ -45,11 +33,11 @@ internal class ClassModel : IDataModel
         TextOfValue = new ReactiveProperty<string>();
     }
 
-    public IDataModel Clone()
+    public IDataModel Clone(string? title)
     {
         return new ClassModel()
         {
-            Title = Title,
+            Title = title ?? Title,
             TypeId = TypeId,
             Children = Children.Select(x => x.Clone()).ToArray(),
         };

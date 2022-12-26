@@ -25,7 +25,7 @@ internal record AssertionContext<TActual>(TActual Actual)
         return this;
     }
 
-    public AssertionContext<TActual> Equal<TExpected>(
+    public AssertionContext<TActual> AreEqual<TExpected>(
         TExpected expected,
         Func<TActual, TExpected> selector)
     {
