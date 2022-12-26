@@ -13,6 +13,7 @@ internal class ClassFactory : IModelFactory
 
         var props = from p in type.GetProperties()
             where p.GetIndexParameters().Length == 0
+            where p.CanRead && p.CanWrite
             let order = p.GetCustomAttribute<OrderAttribute>()?.Value ?? 0
             orderby order
             select loader.LoadType(p.Name, p.PropertyType, loader);

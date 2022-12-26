@@ -252,6 +252,17 @@ public class ClassFactoryTest
                         .Equals("Int1", x => x.Title)));
     }
 
+    [Test]
+    public void 自動実装でないプロパティは対象外()
+    {
+        var model = _aggregatedFactory!.LoadType(typeof(NotAutoImplement));
+
+        model.OnObject()
+            .NotNull()
+            .AssertType<ClassModel>(a => a
+                .OnSequence(b => b.Children));
+    }
+
     private static void AssertModel<T>(FluentAssertionContext<IDataModel> data, string title) where T : IDataModel
     {
         data.AssertType<T>(a => Assert.That(a.Context.Title, Is.EqualTo(title)));
@@ -317,5 +328,10 @@ public class ClassFactoryTest
         public int Int1 { get; set; }
         [RomanescoPlus.Annotations.Order(1)]
         public int Int2 { get; set; }
+    }
+
+    private class NotAutoImplement
+    {
+        public int X => 1;
     }
 }
