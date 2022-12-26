@@ -24,7 +24,6 @@ internal class ClassFactory : IModelFactory
     public IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader)
     {
         if (target is not ClassModel model
-            || model.Title != data.Label
             || data is not SerializedClass serialized) return null;
 
         return new ClassModel()
@@ -32,10 +31,18 @@ internal class ClassFactory : IModelFactory
             Title = model.Title,
             TypeId = model.TypeId,
             Children = model.Children
-                .Select(x => serialized.Children.Select(y => loader.LoadValue(x, y, loader))
-                    .FilterNull()
-                    .FirstOrDefault() ?? x.Clone())
+                .Select(x => LoadMember(x, serialized.Children, loader) ?? x.Clone())
                 .ToArray()
         };
+
+        static IDataModel? LoadMember(
+            IDataModel targetMember,
+            SerializedMember[] members,
+            IModelFactory loader)
+        {
+            return members.FirstOrDefault(x => x.Label == targetMember.Title) is { } toLoad
+                ? loader.LoadValue(targetMember, toLoad.Data, loader)
+                : null;
+        }
     }
 }

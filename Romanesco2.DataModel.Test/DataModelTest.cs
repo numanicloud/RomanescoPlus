@@ -35,10 +35,10 @@ internal class DataModelTest
             Title = "Root"
         };
 
-        Assert.That(model.TextOfValue.Value, Is.EqualTo("DataModelTest { Flag = True }"));
+        Assert.That(model.TextOfValue.Value, Is.EqualTo("{ Flag = True }"));
 
         flagModel.Data.Value = false;
         
-        Assert.That(model.TextOfValue.Value, Is.EqualTo("DataModelTest { Flag = False }"));
+        Assert.That(model.TextOfValue.Value, Is.EqualTo("{ Flag = False }"));
     }
 }

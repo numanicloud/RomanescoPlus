@@ -99,7 +99,6 @@ public class ClassFactoryTest
         };
         var data = new SerializedInt()
         {
-            Label = "Data",
             Value = 18
         };
 
@@ -119,8 +118,7 @@ public class ClassFactoryTest
             typeof(IntClass),
             Model.Int("Value"));
 
-        var data = Serialized.Class("Root",
-            Serialized.Int("Value", 19));
+        var data = Serialized.Class(Serialized.Int(19).Member("Value"));
 
         var result = _aggregatedFactory!.LoadValue(model, data, _aggregatedFactory);
 
@@ -140,11 +138,10 @@ public class ClassFactoryTest
             Model.String("String"),
             Model.Bool("Bool"));
 
-        var data = Serialized.Class("Root",
-            Serialized.Int("Int", 15),
-            Serialized.Float("Float", 0.5f),
-            Serialized.String("String", "Hoge"),
-            Serialized.Bool("Bool", true));
+        var data = Serialized.Class(Serialized.Int(15).Member("Int"),
+            Serialized.Float(0.5f).Member("Float"),
+            Serialized.String("Hoge").Member("String"),
+            Serialized.Bool(true).Member("Bool"));
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
@@ -168,11 +165,10 @@ public class ClassFactoryTest
             Model.String("String"),
             Model.Bool("Bool"));
 
-        var data = Serialized.Class("Root",
-            Serialized.Float("Float", 0.5f),
-            Serialized.String("String", "Hoge"),
-            Serialized.Int("Int", 15),
-            Serialized.Bool("Bool", true));
+        var data = Serialized.Class(Serialized.Float(0.5f).Member("Float"),
+            Serialized.String("Hoge").Member("String"),
+            Serialized.Int(15).Member("Int"),
+            Serialized.Bool(true).Member("Bool"));
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
@@ -193,9 +189,8 @@ public class ClassFactoryTest
             typeof(ComplexClass),
             Model.Int("Int1"));
 
-        var data = Serialized.Class("Root",
-            Serialized.Int("Int1", 99),
-            Serialized.Int("Int2", 88));
+        var data = Serialized.Class(Serialized.Int(99).Member("Int1"),
+            Serialized.Int(88).Member("Int2"));
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 
@@ -215,8 +210,7 @@ public class ClassFactoryTest
             Model.Float("Float"),
             Model.Int("X"));
 
-        var data = Serialized.Class("Root",
-            Serialized.Int("X", 11));
+        var data = Serialized.Class(Serialized.Int(11).Member("X"));
 
         var result = _aggregatedFactory!.LoadValue(model, data);
 

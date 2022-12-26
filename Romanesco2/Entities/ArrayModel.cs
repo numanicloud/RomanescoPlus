@@ -25,8 +25,7 @@ internal class ArrayModel : IDataModel
             .Merge(_items.ObserveMoveChanged().DiscardValue())
             .Merge(_items.ObserveRemoveChanged().DiscardValue())
             .Merge(_items.ObserveReplaceChanged().DiscardValue())
-            .Merge(_items.ObserveResetChanged())
-            .Publish();
+            .Merge(_items.ObserveResetChanged());
         var itemUpdated = collectionChanged
             .SelectMany(_ => Items.Select(y => y.TextOfValue).Merge())
             .DiscardValue();

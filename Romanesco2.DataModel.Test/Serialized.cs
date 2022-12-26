@@ -4,47 +4,59 @@ namespace Romanesco2.DataModel.Test;
 
 internal static class Serialized
 {
-    public static SerializedClass Class(string label, params SerializedData[] children)
+    public static SerializedClass Class(params SerializedMember[] children)
     {
         return new SerializedClass()
         {
-            Label = label,
             Children = children
         };
     }
 
-    public static SerializedInt Int(string label, int value)
+    public static SerializedMember Member(this SerializedData data, string label)
+    {
+        return new SerializedMember()
+        {
+            Data = data,
+            Label = label
+        };
+    }
+
+    public static SerializedArray Array(params SerializedData[] items)
+    {
+        return new SerializedArray()
+        {
+            Items = items
+        };
+    }
+
+    public static SerializedInt Int(int value)
     {
         return new SerializedInt()
         {
-            Label = label,
             Value = value
         };
     }
 
-    public static SerializedBool Bool(string label, bool value)
+    public static SerializedBool Bool(bool value)
     {
         return new()
         {
-            Label = label,
             Value = value
         };
     }
 
-    public static SerializedString String(string label, string value)
+    public static SerializedString String(string value)
     {
         return new SerializedString()
         {
-            Label = label,
             Value = value
         };
     }
 
-    public static SerializedFloat Float(string label, float value)
+    public static SerializedFloat Float(float value)
     {
         return new SerializedFloat()
         {
-            Label = label,
             Value = value
         };
     }

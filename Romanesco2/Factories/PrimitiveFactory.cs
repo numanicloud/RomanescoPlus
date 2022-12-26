@@ -36,8 +36,6 @@ internal class PrimitiveFactory : IModelFactory
 
     public IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader)
     {
-        if (target.Title != data.Label) return null;
-
         if (target is IntModel iModel && data is SerializedInt iData)
             return new IntModel()
             {

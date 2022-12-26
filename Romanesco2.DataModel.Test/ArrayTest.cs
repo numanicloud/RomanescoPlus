@@ -1,5 +1,6 @@
 ﻿using Romanesco2.DataModel.Entities;
 using Romanesco2.DataModel.Factories;
+using Romanesco2.DataModel.Serialization;
 using Romanesco2.DataModel.Test.Structural;
 
 namespace Romanesco2.DataModel.Test;
@@ -26,24 +27,19 @@ internal class ArrayTest
     public void 配列のあるクラスを読み込める()
     {
         var model = _aggregatedFactory!.LoadType(typeof(ClassWithArray));
-
-        model.BeginAssertion()
+        
+        using var members = model.BeginAssertion()
             .NotNull()
             .Type<ClassModel>()
-            .Extract(out var root);
+            .Sequence(x => x.Children);
 
-        using (var members = root.Sequence(x => x.Children))
-        {
-            members.Next()
-                .Type<ArrayModel>()
-                .Empty(x => x.Items.ToArray())
-                .AreEqual("Ints", x => x.Title)
-                .Extract(out var array);
-
-            array.Select(x => x.Prototype)
-                .Type<IntModel>()
-                .AreEqual("Prototype(Ints)", x => x.Title);
-        }
+        members.Next()
+            .Type<ArrayModel>()
+            .Empty(x => x.Items.ToArray())
+            .AreEqual("Ints", x => x.Title)
+            .Select(x => x.Prototype)
+            .Type<IntModel>()
+            .AreEqual("Prototype(Ints)", x => x.Title);
     }
 
     [Test]
@@ -106,11 +102,9 @@ internal class ArrayTest
             .Type<ClassModel>()
             .Sequence(x => x.Children.ToArray());
 
-        members.Next()
+        using var members2 = members.Next()
             .Type<ArrayModel>()
-            .Extract(out var array);
-
-        using var members2 = array.Select(x => x.Prototype)
+            .Select(x => x.Prototype)
             .Type<ClassModel>()
             .Sequence(x => x.Children.ToArray());
 
@@ -144,6 +138,31 @@ internal class ArrayTest
             Is.EqualTo("""
                 { Objects = [{ X = 71, Flag = True }] }
                 """));
+    }
+
+    [Test]
+    public void 配列に値を読み込める()
+    {
+        var model = Model.Array("List", Model.Int("Item(List)"));
+
+        var serialized = Serialized.Array(
+            Serialized.Int(2),
+            Serialized.Int(11));
+
+        var result = _aggregatedFactory!.LoadValue(model, serialized);
+
+        using var items = result.BeginAssertion()
+            .NotNull()
+            .Type<ArrayModel>()
+            .Sequence(x => x.Items.ToArray());
+
+        items.Next()
+            .Type<IntModel>()
+            .AreEqual(2, x => x.Data.Value);
+
+        items.Next()
+            .Type<IntModel>()
+            .AreEqual(11, x => x.Data.Value);
     }
 
     private static Exception FailWithTestRequirement()

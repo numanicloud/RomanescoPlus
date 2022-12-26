@@ -19,8 +19,7 @@ internal class ArrayFactory : IModelFactory
 
     public IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader)
     {
-        if (target.Title != data.Label
-            || target is not ArrayModel model
+        if (target is not ArrayModel model
             || data is not SerializedArray serialized) return null;
 
         var result = new ArrayModel()
