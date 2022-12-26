@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Romanesco2\Romanesco.DataModel.csproj" />
+    <ProjectReference Include="..\RomanescoPlus.Annotations\RomanescoPlus.Annotations.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,4 +10,8 @@
     <PackageReference Include="ReactiveProperty" Version="8.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RomanescoPlus.Annotations\RomanescoPlus.Annotations.csproj" />
+  </ItemGroup>
+
 </Project>

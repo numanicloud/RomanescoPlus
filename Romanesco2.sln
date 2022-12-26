@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romanesco.DataModel", "Roma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romanesco.DataModel.Test", "Romanesco2.DataModel.Test\Romanesco.DataModel.Test.csproj", "{5130B6FE-58CA-4750-A9B6-D1BFA76B4ADF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomanescoPlus.Annotations", "RomanescoPlus.Annotations\RomanescoPlus.Annotations.csproj", "{38A3A570-F028-4B75-8CCB-7DFB2FECB73D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5130B6FE-58CA-4750-A9B6-D1BFA76B4ADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5130B6FE-58CA-4750-A9B6-D1BFA76B4ADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5130B6FE-58CA-4750-A9B6-D1BFA76B4ADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A3A570-F028-4B75-8CCB-7DFB2FECB73D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A3A570-F028-4B75-8CCB-7DFB2FECB73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A3A570-F028-4B75-8CCB-7DFB2FECB73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A3A570-F028-4B75-8CCB-7DFB2FECB73D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

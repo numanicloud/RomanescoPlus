@@ -1,5 +1,7 @@
-﻿using Romanesco.DataModel.Entities;
+﻿using System.Reflection;
+using Romanesco.DataModel.Entities;
 using Romanesco.DataModel.Serialization;
+using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Factories;
 
@@ -11,6 +13,8 @@ internal class ClassFactory : IModelFactory
 
         var props = from p in type.GetProperties()
             where p.GetIndexParameters().Length == 0
+            let order = p.GetCustomAttribute<OrderAttribute>()?.Value ?? 0
+            orderby order
             select loader.LoadType(p.Name, p.PropertyType, loader);
 
         return new ClassModel()

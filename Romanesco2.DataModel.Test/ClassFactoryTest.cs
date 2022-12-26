@@ -237,6 +237,21 @@ public class ClassFactoryTest
                     .Do(d => Assert.That(d.Title, Is.EqualTo("First"))))));
     }
 
+    [Test]
+    public void Order属性の順に並ぶ()
+    {
+        var model = _aggregatedFactory!.LoadType(typeof(Ordered));
+
+        model.OnObject()
+            .NotNull()
+            .AssertType<ClassModel>(a => a
+                .OnSequence(b => b.Children,
+                    b => b.AssertType<IntModel>()
+                        .Equals("Int2", x => x.Title),
+                    b => b.AssertType<IntModel>()
+                        .Equals("Int1", x => x.Title)));
+    }
+
     private static void AssertModel<T>(FluentAssertionContext<IDataModel> data, string title) where T : IDataModel
     {
         data.AssertType<T>(a => Assert.That(a.Context.Title, Is.EqualTo(title)));
@@ -294,5 +309,13 @@ public class ClassFactoryTest
     private class SecondClass
     {
         public FirstClass First { get; set; }
+    }
+
+    private class Ordered
+    {
+        [RomanescoPlus.Annotations.Order(2)]
+        public int Int1 { get; set; }
+        [RomanescoPlus.Annotations.Order(1)]
+        public int Int2 { get; set; }
     }
 }
