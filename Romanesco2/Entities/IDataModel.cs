@@ -2,7 +2,7 @@
 
 namespace Romanesco.DataModel.Entities;
 
-internal interface IDataModel
+public interface IDataModel
 {
     string Title { get; }
     IReadOnlyReactiveProperty<string> TextOfValue { get; }
