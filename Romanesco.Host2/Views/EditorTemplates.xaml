@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:Romanesco.Host2.ViewModels"
+                    x:Class="Romanesco.Host2.Views.EditorTemplates">
+
+    <DataTemplate DataType="{x:Type vm:LoadedProjectViewModel}" x:Key="LoadedProject">
+        <Label Content="プロジェクトが読み込まれています。"/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NullProjectViewModel}" x:Key="NullProject">
+        <Label Content="プロジェクトが読み込まれていません。"/>
+    </DataTemplate>
+
+</ResourceDictionary>

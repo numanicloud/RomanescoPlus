@@ -1,11 +1,18 @@
 ﻿using Numani.TypedFilePath.Interfaces;
+using Reactive.Bindings;
 using Romanesco.DataModel.Entities;
 
 namespace Romanesco.EditorModel;
 
-internal class Project
+public class Project
 {
-    public required IAbsoluteFilePath PathLoadFrom { get; init; }
-    public required IAbsoluteFilePath DllPath { get; init; }
+    public ReactiveProperty<IAbsoluteFilePathExt> DefaultSavePath { get; }
+    public ReactiveProperty<IAbsoluteFilePathExt> DllPath { get; }
     public required IDataModel DataModel { get; init; }
+
+    public Project(IAbsoluteFilePathExt defaultSavePath, IAbsoluteFilePathExt dllPath)
+    {
+        DefaultSavePath = new ReactiveProperty<IAbsoluteFilePathExt>(defaultSavePath);
+        DllPath = new ReactiveProperty<IAbsoluteFilePathExt>(dllPath);
+    }
 }
