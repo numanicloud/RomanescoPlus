@@ -95,12 +95,112 @@ using (var members = root.AssertSequence(x => x.Children))
 
 プラグインでデータモデルを追加できるようにする必要性をあまり感じなかった。
 
+## インライン/ブロックの呼び分け
+
+DataTemplateSelectorとDependencyPropertyを組み合わせる。
+
+DependencyProperty `Layout` を作成し、 `Layout` が `Inline` である場合と `Block` である場合で DataTemplateSelector `FieldViewTemplateSelector` の中で分岐する。
+
+プラグインは、InlineであるときとBlockであるときの見た目を `FieldViewTemplateSelector` に登録できる。
+
+`Layout` を指定していないビューは、 `Inline` にも `Block` にも同じ見た目の、指定されたビューのうち最初のものが使われる。
+
+## ID参照
+
+モデルから見ると、ID参照は単なるintやstringに過ぎない。
+
+これをビュー上で参照のように提示したいのであれば、そのサポートはViewModel以上の部分でやるべき。
+
+それから、参照先を次のブロックで編集できる機能が欲しい。
+
 # ロードマップ
 
-## データを解析できるようにする
+## ✅ データを解析できるようにする
 
 int, bool, string, floatなどのデータを解析し、Modelクラスに変換できるようにする。
 また、これらをメンバーに持つクラスを解析できるようにする。
+
+## 🚧 DLLを読み込んでプロジェクトを作成できるようにする
+
+まず、Hostプロジェクトを作る。プロジェクトの作成、管理、プラグインの読み込みはHostの管轄。
+
+エディターは最初空っぽ。DLLを読み込むとデータがある状態に遷移する。最初は画面に読み込んだデータの文字列形式を表示するのみにする。
+空っぽのときは、画面中央に「プロジェクトを作成するか開いてください」と表示する。
+
+Host.csproj
+└─Views
+  └─MainWindow
+└─ViewModels
+  └─EditorViewModel
+└─Hosting
+  └─PluginHost
+
+## 🚧 ビューを作る
+
+### 🚧 1階層だけの場合の実装を作る
+
+int, bool, string, float, class, array, reference, subtyping のビューを作る。
+
+ViewModel~Viewはプラグインで実装する。DataTemplateSelectorをうまく活用すること。
+
+```csharp
+public class PluginsDataTemplateSelector
+{
+    public DataTemplate? GetTemplate(IDataViewModel vm, DepdendencyObject sender)
+    {
+        if (vm is IntViewModel) return new DataTemplate("int用のテンプレート...");
+    }
+}
+```
+
+### 🚧 Editコマンドを作って任意の階層を作れる
+
+class, arrayなどは編集ボタンを押すと編集ブロックが開いて編集できる。
+
+## 🚧 プラグインから見たModel
+
+DataModelがReactivePropertyに依存しないようになれば、プラグイン側もReactivePropertyを気にせずに済むので得。
+
+プラグイン側で ReactiveProperty の知識を不要にするだけであれば、ReactiveProperty版と素直なバージョンを両方提供すればいい気もする。
+例えば IntModel は、 ReactiveProperty<int> 型のプロパティと int 型のプロパティをどちらも提供する。
+
+## 🚧 継承のサポート
+
+継承のサポートはモデルの役目。
+
+SubtypingModel は SubtypeOptions クラスを持ち、 SubtypeOptions は NullOption または JustOption のリストを持つ。 SubtypeOptions は複数の SubtypingModel 間で共有される。
+
+## 🚧 コマンドサポート
+
+データDLLで拡張メソッドを使ってコマンドを追加できるようにしたい。
+
+```csharp
+[EditorCommandSource]
+public static class Commands
+{
+    // 第一引数が T で、戻り値も同じ T であるようなstaticメソッドがコマンドとして利用できる。
+    [Name("ID自動設定")]
+    public static MyType[] UpdateId(this MyType[] source)
+    {
+        return source.Select((x, i) => source with { Id = i }).ToArray();
+    }
+}
+```
+
+実行するとDecodeが走り、それを引数に次にコマンドが実行され、その戻り値を使って最後にLoadValueする。
+
+## 🚧 ローカライズサポート
+
+Name属性をつけると、エディター上で表示するときのメンバー名を設定できる。
+第二引数はoptionalで、ローカライズするときに使うKeyを指定できる。デフォルトでJP。
+
+```csharp
+public class Hoge
+{
+    [Name("識別子", JP)]
+    public string Id { get; set; }
+}
+```
 
 # 懸念点
 
