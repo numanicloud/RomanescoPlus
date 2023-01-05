@@ -4,7 +4,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Reactive.Bindings;
-using Romanesco.DataModel.Entities;
 
 namespace Romanesco.Host2.ViewModels;
 
@@ -34,5 +33,10 @@ public class ClassViewModel : IDataViewModel
     public ClassViewModel()
     {
         DetailedData = new ReactiveProperty<IDataViewModel>(new NoneViewModel());
+    }
+
+    public void Edit()
+    {
+        _openDetailSubject.OnNext(Unit.Default);
     }
 }

@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:m="clr-namespace:Romanesco.DataModel.Entities;assembly=Romanesco.DataModel"
              xmlns:vm="clr-namespace:Romanesco.Host2.ViewModels"
+             xmlns:v="clr-namespace:Romanesco.Host2.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -33,6 +34,8 @@
 
             <ItemsControl ItemsSource="{Binding Children}" Grid.Row="1" Margin="2"
                           ItemTemplateSelector="{StaticResource TemplateSelector}"
+                          v:EditorEntry.Layout="Inline"
+                          v:EditorEntry.Trace="ClassMemberView"
                           Grid.IsSharedSizeScope="True">
                 <d:ItemsControl.ItemsSource>
                     <x:Array Type="vm:IDataViewModel">
@@ -51,8 +54,13 @@
             </ItemsControl>
         </Grid>
 
+        <Border Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Left"
+                BorderThickness="1,0,0,0" BorderBrush="LightSteelBlue"/>
+
         <ContentControl Content="{Binding DetailedData.Value}" Grid.Column="1"
-                        ContentTemplateSelector="{StaticResource TemplateSelector}">
+                        ContentTemplateSelector="{StaticResource TemplateSelector}"
+                        v:EditorEntry.Layout="Block"
+                        v:EditorEntry.Trace="DetailView">
             <d:ContentControl.Content>
                 <vm:IntViewModel>
                     <vm:IntViewModel.Model>

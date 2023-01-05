@@ -13,16 +13,23 @@ internal class DataModelTemplateSelector : DataTemplateSelector
     private readonly List<DataTemplateEntry> _inlineTemplates = new();
 
     public ObservableCollection<DataTemplateEntry> DefaultInlineTemplates { get; set; } = new();
+    public ObservableCollection<DataTemplateEntry> DefaultBlockTemplates { get; set; } = new();
 
     public override DataTemplate SelectTemplate(object? item, DependencyObject container)
     {
         if (item is null)
         {
-            return null!;
+            return base.SelectTemplate(item, container)!;
         }
 
-        return _inlineTemplates.Concat(DefaultInlineTemplates)
-            .Where(x => x.IsMatch(item.GetType()))
+        var source = EditorEntry.GetLayout(container) switch
+        {
+            EditorEntry.Layout.Inline => _inlineTemplates.Concat(DefaultInlineTemplates),
+            EditorEntry.Layout.Block => DefaultBlockTemplates,
+            _ => throw new Exception()
+        };
+
+        return source.Where(x => x.IsMatch(item.GetType()))
             .OrderByDescending(x => x.Priority)
             .Select(x => x.DataTemplate)
             .FirstOrDefault()!;

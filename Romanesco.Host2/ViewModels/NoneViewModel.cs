@@ -6,5 +6,6 @@ namespace Romanesco.Host2.ViewModels;
 
 public class NoneViewModel : IDataViewModel
 {
+    public string Title { get; } = "";
     public IObservable<Unit> OpenDetail { get; } = Observable.Never<Unit>();
 }

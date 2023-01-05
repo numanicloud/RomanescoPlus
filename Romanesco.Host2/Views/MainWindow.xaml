@@ -46,7 +46,9 @@
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type vm:LoadedProjectViewModel}">
                     <ContentControl Content="{Binding Root}"
-                                    ContentTemplateSelector="{StaticResource TemplateSelector}"/>
+                                    ContentTemplateSelector="{StaticResource TemplateSelector}"
+                                    v:EditorEntry.Layout="Block"
+                                    v:EditorEntry.Trace="ProjectView"/>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type vm:NullProjectViewModel}">

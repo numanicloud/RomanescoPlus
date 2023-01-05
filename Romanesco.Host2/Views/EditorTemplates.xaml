@@ -4,7 +4,7 @@
                     x:Class="Romanesco.Host2.Views.EditorTemplates"
                     xmlns:v="clr-namespace:Romanesco.Host2.Views">
 
-    <DataTemplate DataType="{x:Type vm:IntViewModel}" x:Key="IntData">
+    <ControlTemplate x:Key="Entry" TargetType="ContentControl">
         <Grid VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition SharedSizeGroup="Title" Width="Auto"/>
@@ -14,25 +14,39 @@
 
             <Label Content="{Binding Title}" HorizontalAlignment="Right"/>
             <Label Content=":" Grid.Column="1"/>
-            <TextBox Text="{Binding Data.Value}" Grid.Column="2" VerticalContentAlignment="Center"
-                     Margin="3" Padding="2" Height="25"/>
+            <ContentPresenter Grid.Column="2"/>
         </Grid>
+    </ControlTemplate>
+
+    <DataTemplate DataType="{x:Type vm:IntViewModel}" x:Key="IntInline">
+        <ContentControl Template="{StaticResource Entry}">
+            <TextBox Text="{Binding Data.Value}" VerticalContentAlignment="Center"
+                     Margin="3" Padding="2" Height="25"/>
+        </ContentControl>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:ClassViewModel}" x:Key="ClassData">
+    <DataTemplate DataType="{x:Type vm:ClassViewModel}" x:Key="ClassBlock">
         <v:ClassBlock DataContext="{Binding}"/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:NoneViewModel}" x:Key="NoneData">
+    <DataTemplate DataType="{x:Type vm:NoneViewModel}" x:Key="NoneInline">
         <Grid></Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ClassViewModel}" x:Key="ClassInline">
+        <v:ClassInline DataContext="{Binding}"/>
     </DataTemplate>
 
     <v:DataModelTemplateSelector x:Key="TemplateSelector">
         <v:DataModelTemplateSelector.DefaultInlineTemplates>
-            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource IntData}"/>
-            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ClassData}"/>
-            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneData}"/>
+            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource IntInline}"/>
+            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>
+            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ClassInline}"/>
         </v:DataModelTemplateSelector.DefaultInlineTemplates>
+        <v:DataModelTemplateSelector.DefaultBlockTemplates>
+            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>
+            <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ClassBlock}"/>
+        </v:DataModelTemplateSelector.DefaultBlockTemplates>
     </v:DataModelTemplateSelector>
 
 </ResourceDictionary>
