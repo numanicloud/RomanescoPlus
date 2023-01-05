@@ -1,6 +1,6 @@
 ﻿namespace Romanesco.DataModel.Entities;
 
-internal class IntModel : PrimitiveModel<int>
+public class IntModel : PrimitiveModel<int>
 {
     public IntModel() : base(default(int).ToString())
     {

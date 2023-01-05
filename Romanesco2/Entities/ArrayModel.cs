@@ -7,7 +7,7 @@ using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Entities;
 
-internal class ArrayModel : IDataModel
+public class ArrayModel : IDataModel
 {
     private readonly ObservableCollection<IDataModel> _items = new ();
 

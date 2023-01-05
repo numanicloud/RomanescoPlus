@@ -1,6 +1,6 @@
 ﻿namespace Romanesco.DataModel.Entities;
 
-internal class StringModel : PrimitiveModel<string>
+public class StringModel : PrimitiveModel<string>
 {
     public StringModel() : base("")
     {

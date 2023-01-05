@@ -3,7 +3,7 @@ using Reactive.Bindings;
 
 namespace Romanesco.DataModel.Entities;
 
-internal abstract class PrimitiveModel<T> : IDataModel
+public abstract class PrimitiveModel<T> : IDataModel
     where T : notnull
 {
     public required string Title { get; init; }

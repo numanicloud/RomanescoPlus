@@ -29,7 +29,7 @@ public class EditorViewModel : ViewModel, IEditorView
         ProjectViewModel ToViewModel(EditorModel.Project? project)
         {
             return project is not null
-                ? new LoadedProjectViewModel()
+                ? new LoadedProjectViewModel(project)
                 : new NullProjectViewModel();
         }
     }
@@ -52,6 +52,13 @@ public class ProjectViewModel
 
 public class LoadedProjectViewModel : ProjectViewModel
 {
+    public IDataViewModel Root { get; }
+
+    public LoadedProjectViewModel(Project project)
+    {
+        var factory = new ViewModelFactory();
+        Root = factory.Create(project.DataModel);
+    }
 }
 
 public class NullProjectViewModel : ProjectViewModel

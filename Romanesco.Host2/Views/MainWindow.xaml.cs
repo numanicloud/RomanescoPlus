@@ -11,11 +11,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-
-        var resources = new ResourceDictionary()
-        {
-            Source = new Uri("pack://application:,,,/Views/EditorTemplates.xaml")
-        };
-        TemplateSelector.AddInlineTemplate(resources);
+        
+        var selector = (DataModelTemplateSelector)Resources["TemplateSelector"];
     }
 }

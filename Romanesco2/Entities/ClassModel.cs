@@ -3,7 +3,7 @@ using Reactive.Bindings;
 
 namespace Romanesco.DataModel.Entities;
 
-internal class ClassModel : IDataModel
+public class ClassModel : IDataModel
 {
     private readonly IDataModel[] _children = Array.Empty<IDataModel>();
     

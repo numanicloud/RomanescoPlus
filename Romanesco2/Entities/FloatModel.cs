@@ -1,6 +1,6 @@
 ﻿namespace Romanesco.DataModel.Entities;
 
-internal class FloatModel : PrimitiveModel<float>
+public class FloatModel : PrimitiveModel<float>
 {
     public FloatModel() : base(default(float).ToString())
     {

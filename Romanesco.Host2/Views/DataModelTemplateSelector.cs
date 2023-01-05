@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,19 +10,41 @@ namespace Romanesco.Host2.Views;
 
 internal class DataModelTemplateSelector : DataTemplateSelector
 {
-    private readonly List<DataTemplate> _inlineTemplates2 = new List<DataTemplate>();
+    private readonly List<DataTemplateEntry> _inlineTemplates = new();
 
-    public override DataTemplate SelectTemplate(object item, DependencyObject container)
+    public ObservableCollection<DataTemplateEntry> DefaultInlineTemplates { get; set; } = new();
+
+    public override DataTemplate SelectTemplate(object? item, DependencyObject container)
     {
-        return _inlineTemplates2
-            .FirstOrDefault(x => x.DataType as Type == item.GetType())!;
+        if (item is null)
+        {
+            return null!;
+        }
+
+        return _inlineTemplates.Concat(DefaultInlineTemplates)
+            .Where(x => x.IsMatch(item.GetType()))
+            .OrderByDescending(x => x.Priority)
+            .Select(x => x.DataTemplate)
+            .FirstOrDefault()!;
     }
 
-    public void AddInlineTemplate(ResourceDictionary inlineTemplates)
+    public void AddInlineTemplate(ResourceDictionary inlineTemplates, int priority)
     {
         inlineTemplates.Values
             .OfType<DataTemplate>()
             .ToList()
-            .ForEach(x => _inlineTemplates2.Add(x));
+            .ForEach(x => _inlineTemplates.Add(new DataTemplateEntry()
+            {
+                DataTemplate = x,
+                Priority = priority
+            }));
     }
+}
+
+internal class DataTemplateEntry
+{
+    public required int Priority { get; init; }
+    public required DataTemplate DataTemplate { get; init; }
+
+    public bool IsMatch(Type type) => DataTemplate.DataType as Type == type;
 }

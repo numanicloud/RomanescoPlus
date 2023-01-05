@@ -1,6 +1,6 @@
 ﻿namespace Romanesco.DataModel.Entities;
 
-internal record TypeId
+public record TypeId
 {
     public string Name { get; }
     public string MetadataName { get; }
