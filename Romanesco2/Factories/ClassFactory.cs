@@ -51,6 +51,21 @@ public class ClassFactory : IModelFactory
         }
     }
 
+    public SerializedData? MakeData(IDataModel model, IModelFactory factory)
+    {
+        if (model is not ClassModel c) return null;
+
+        return new SerializedClass()
+        {
+            Children = c.Children.Select(x => new SerializedMember()
+                {
+                    Data = factory.MakeData(x, factory) ?? throw new InvalidOperationException(),
+                    Label = x.Title
+                })
+                .ToArray(),
+        };
+    }
+
     public object? Decode(IDataModel source, Type targetType, IModelFactory decoder)
     {
         if (source is not ClassModel model

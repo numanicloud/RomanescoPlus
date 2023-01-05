@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Livet;
 using Livet.Messaging;
+using Livet.Messaging.IO;
+using Numani.TypedFilePath.Infrastructure;
+using Numani.TypedFilePath.Interfaces;
 using Reactive.Bindings;
 using Romanesco.EditorModel;
 using Romanesco.EditorModel.Projects;
@@ -37,6 +41,8 @@ public class EditorViewModel : ViewModel, IEditorView
 
     public void CreateProjectAsync() => _model.CreateProjectAsync().Forget();
 
+    public void SaveNewProjectAsync() => _model.SaveAsAsync().Forget();
+
     public async Task<ProjectCreationResult> SetupProjectCreationAsync()
     {
         var vm = new ProjectCreationWizardViewModel();
@@ -45,23 +51,21 @@ public class EditorViewModel : ViewModel, IEditorView
 
         return vm.ToResult();
     }
-}
 
-public class ProjectViewModel
-{
-}
-
-public class LoadedProjectViewModel : ProjectViewModel
-{
-    public IDataViewModel Root { get; }
-
-    public LoadedProjectViewModel(Project project)
+    public async Task<IAbsoluteFilePathExt?> PickSavePathAsync(IAbsoluteFilePathExt defaultPath)
     {
-        var factory = new ViewModelFactory();
-        Root = factory.Create(project.DataModel);
-    }
-}
+        var message = new SavingFileSelectionMessage("SaveProject")
+        {
+            InitialDirectory = Directory.GetParent(defaultPath.PathString)!.FullName
+        };
 
-public class NullProjectViewModel : ProjectViewModel
-{
+        await Messenger.RaiseAsync(message);
+
+        if (message.Response is not { } r || r.Length < 1)
+        {
+            return null;
+        }
+
+        return r[0].AssertAbsoluteFilePathExt();
+    }
 }

@@ -58,6 +58,30 @@ public class AggregatedFactory : IModelFactory
         return null;
     }
 
+    public SerializedData MakeData(IDataModel model)
+    {
+        return MakeData(model, this)
+            ?? throw new Exception();
+    }
+
+    public SerializedData? MakeData(IDataModel model, IModelFactory factory)
+    {
+        foreach (var f in Factories)
+        {
+            if (f.MakeData(model, factory) is { } result)
+            {
+                return result;
+            }
+        }
+
+        if (ClassFactory.MakeData(model, factory) is { } result2)
+        {
+            return result2;
+        }
+
+        return null;
+    }
+
     public object Decode(IDataModel source, Type targetType)
     {
         return Decode(source, targetType, this)

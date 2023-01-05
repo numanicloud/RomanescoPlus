@@ -1,5 +1,13 @@
-﻿namespace Romanesco.DataModel.Serialization;
+﻿using System.Text.Json.Serialization;
 
+namespace Romanesco.DataModel.Serialization;
+
+[JsonDerivedType(typeof(SerializedInt))]
+[JsonDerivedType(typeof(SerializedBool))]
+[JsonDerivedType(typeof(SerializedString))]
+[JsonDerivedType(typeof(SerializedFloat))]
+[JsonDerivedType(typeof(SerializedClass))]
+[JsonDerivedType(typeof(SerializedArray))]
 public abstract class SerializedData
 {
 }

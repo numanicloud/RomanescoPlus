@@ -1,4 +1,6 @@
-﻿using Numani.TypedFilePath;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Numani.TypedFilePath;
 using Reactive.Bindings;
 using Numani.TypedFilePath.Infrastructure;
 using Romanesco.DataModel.Factories;
@@ -37,5 +39,28 @@ public class Editor
         {
             DataModel = model
         };
+    }
+
+    public async Task SaveAsAsync()
+    {
+        if (CurrentProject.Value is not { } project)
+        {
+            return;
+        }
+        
+        var path = await View.PickSavePathAsync(project.DefaultSavePath.Value);
+        if (path is null)
+        {
+            return;
+        }
+
+        var serializable = new SerializedProject()
+        {
+            Data = _modelFactory.MakeData(project.DataModel),
+            DllPath = project.DllPath.Value.PathString
+        };
+        
+        await using var file = path.Create();
+        await JsonSerializer.SerializeAsync(file, serializable);
     }
 }

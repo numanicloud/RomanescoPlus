@@ -58,6 +58,18 @@ public class PrimitiveFactory : IModelFactory
         };
     }
 
+    public SerializedData? MakeData(IDataModel model, IModelFactory factory)
+    {
+        return model switch
+        {
+            IntModel i => new SerializedInt() { Value = i.Data.Value },
+            BoolModel b => new SerializedBool() { Value = b.Data.Value },
+            StringModel s => new SerializedString() { Value = s.Data.Value },
+            FloatModel f => new SerializedFloat() { Value = f.Data.Value },
+            _ => null
+        };
+    }
+
     public object? Decode(IDataModel source, Type targetType, IModelFactory decoder)
     {
         return source switch

@@ -38,6 +38,18 @@ public class ArrayFactory : IModelFactory
         return result;
     }
 
+    public SerializedData? MakeData(IDataModel model, IModelFactory factory)
+    {
+        if (model is not ArrayModel array) return null;
+
+        return new SerializedArray()
+        {
+            Items = array.Items.Select(x => factory.MakeData(x, factory))
+                .FilterNull()
+                .ToArray(),
+        };
+    }
+
     public object? Decode(IDataModel source, Type targetType, IModelFactory decoder)
     {
         if (source is not ArrayModel model
