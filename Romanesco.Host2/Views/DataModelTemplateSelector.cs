@@ -13,7 +13,7 @@ internal class DataModelTemplateSelector : DataTemplateSelector
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
     {
         return _inlineTemplates2
-            .First(x => x.DataType as Type == item.GetType());
+            .FirstOrDefault(x => x.DataType as Type == item.GetType())!;
     }
 
     public void AddInlineTemplate(ResourceDictionary inlineTemplates)

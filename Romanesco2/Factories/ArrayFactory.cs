@@ -3,7 +3,7 @@ using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Factories;
 
-internal class ArrayFactory : IModelFactory
+public class ArrayFactory : IModelFactory
 {
     public IDataModel? LoadType(string title, Type type, IModelFactory loader)
     {

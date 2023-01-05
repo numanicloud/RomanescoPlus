@@ -3,7 +3,7 @@ using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Factories;
 
-internal class AggregatedFactory : IModelFactory
+public class AggregatedFactory : IModelFactory
 {
     public const string RootTitle = "Root";
 

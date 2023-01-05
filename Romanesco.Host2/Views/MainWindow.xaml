@@ -6,14 +6,39 @@
         xmlns:local="clr-namespace:Romanesco.Host2"
         xmlns:vm="clr-namespace:Romanesco.Host2.ViewModels"
         xmlns:v="clr-namespace:Romanesco.Host2.Views"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <vm:EditorViewModel/>
     </Window.DataContext>
+    
+    <b:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="NewProject" Messenger="{Binding Messenger}">
+            <l:TransitionInteractionMessageAction/>
+        </l:InteractionMessageTrigger>
+    </b:Interaction.Triggers>
 
     <Grid>
-        <ContentControl Content="{Binding Project.Value}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Height="24">
+            <MenuItem Header="ファイル" Margin="4">
+                <MenuItem Header="新規作成...">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CreateProjectAsync"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <ContentControl Grid.Row="1" Content="{Binding Project.Value}">
             <ContentControl.ContentTemplateSelector>
                 <v:DataModelTemplateSelector x:Name="TemplateSelector"/>
             </ContentControl.ContentTemplateSelector>

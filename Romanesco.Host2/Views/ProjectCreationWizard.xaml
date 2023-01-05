@@ -1,0 +1,74 @@
+﻿<Window x:Class="Romanesco.Host2.Views.ProjectCreationWizard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Romanesco.Host2.Views"
+        xmlns:vm="clr-namespace:Romanesco.Host2.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        mc:Ignorable="d"
+        Title="ProjectCreationWizard" Height="450" Width="450">
+    <d:Window.DataContext>
+        <vm:ProjectCreationWizardViewModel />
+    </d:Window.DataContext>
+
+    <b:Interaction.Triggers>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="Close">
+            <l:WindowInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="OpenDll">
+            <l:OpenFileDialogInteractionMessageAction>
+                <l:DirectInteractionMessage CallbackMethodTarget="{Binding}" CallbackMethodName="DllSelected">
+                    <l:OpeningFileSelectionMessage Title="データ DLLを開く"/>
+                </l:DirectInteractionMessage>
+            </l:OpenFileDialogInteractionMessageAction>
+        </l:InteractionMessageTrigger>
+    </b:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <Label Content="データDLL :" Margin="8,4,8,4"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" TextWrapping="Wrap" Text="{Binding DllPath.Value}" Margin="8,4,8,4"/>
+                <Button Grid.Column="1" Content="参照" Margin="8,4,8,4">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OpenDll"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+            </Grid>
+
+            <Label Content="データ型 :"/>
+            <ComboBox Margin="8,4,8,4" ItemsSource="{Binding TypeOptions.Value}"
+                      SelectedIndex="{Binding SelectedIndex.Value}"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Content="作成" Margin="8,4,8,4" IsEnabled="{Binding IsValid.Value}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Click">
+                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Confirm"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

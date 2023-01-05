@@ -5,7 +5,7 @@ using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Factories;
 
-internal class ClassFactory : IModelFactory
+public class ClassFactory : IModelFactory
 {
     public IDataModel? LoadType(string title, Type type, IModelFactory loader)
     {
