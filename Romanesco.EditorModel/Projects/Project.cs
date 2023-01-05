@@ -2,7 +2,7 @@
 using Reactive.Bindings;
 using Romanesco.DataModel.Entities;
 
-namespace Romanesco.EditorModel;
+namespace Romanesco.EditorModel.Projects;
 
 public class Project
 {

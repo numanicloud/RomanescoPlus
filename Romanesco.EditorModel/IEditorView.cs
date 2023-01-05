@@ -1,4 +1,6 @@
-﻿namespace Romanesco.EditorModel;
+﻿using Romanesco.EditorModel.Projects;
+
+namespace Romanesco.EditorModel;
 
 public interface IEditorView
 {

@@ -2,6 +2,7 @@
 using Reactive.Bindings;
 using Numani.TypedFilePath.Infrastructure;
 using Romanesco.DataModel.Factories;
+using Romanesco.EditorModel.Projects;
 
 namespace Romanesco.EditorModel;
 

@@ -5,6 +5,7 @@ using Livet;
 using Livet.Messaging;
 using Reactive.Bindings;
 using Romanesco.EditorModel;
+using Romanesco.EditorModel.Projects;
 using ProjectCreationWizard = Romanesco.Host2.Views.ProjectCreationWizard;
 
 namespace Romanesco.Host2.ViewModels;
@@ -26,7 +27,7 @@ public class EditorViewModel : ViewModel, IEditorView
             .Select(ToViewModel)
             .ToReadOnlyReactiveProperty(new NullProjectViewModel());
 
-        ProjectViewModel ToViewModel(EditorModel.Project? project)
+        ProjectViewModel ToViewModel(Project? project)
         {
             return project is not null
                 ? new LoadedProjectViewModel(project)

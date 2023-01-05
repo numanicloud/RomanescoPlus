@@ -6,7 +6,7 @@ using Numani.TypedFilePath.Interfaces;
 using Reactive.Bindings;
 using RomanescoPlus.Annotations;
 
-namespace Romanesco.EditorModel;
+namespace Romanesco.EditorModel.Projects;
 
 public class ProjectCreationWizard
 {

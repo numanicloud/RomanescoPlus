@@ -4,6 +4,7 @@ using Livet.Messaging.IO;
 using Livet.Messaging.Windows;
 using Reactive.Bindings;
 using Romanesco.EditorModel;
+using Romanesco.EditorModel.Projects;
 
 namespace Romanesco.Host2.ViewModels;
 

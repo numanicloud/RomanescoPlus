@@ -1,6 +1,6 @@
 ﻿using Romanesco.DataModel.Serialization;
 
-namespace Romanesco.EditorModel;
+namespace Romanesco.EditorModel.Projects;
 
 public class SerializedProject
 {

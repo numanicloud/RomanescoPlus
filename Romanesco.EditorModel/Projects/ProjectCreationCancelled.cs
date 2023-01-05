@@ -1,3 +1,3 @@
-﻿namespace Romanesco.EditorModel;
+﻿namespace Romanesco.EditorModel.Projects;
 
 public record ProjectCreationCancelled() : ProjectCreationResult;
