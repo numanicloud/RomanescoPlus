@@ -120,7 +120,7 @@ DependencyProperty `Layout` を作成し、 `Layout` が `Inline` である場�
 int, bool, string, floatなどのデータを解析し、Modelクラスに変換できるようにする。
 また、これらをメンバーに持つクラスを解析できるようにする。
 
-## 🚧 DLLを読み込んでプロジェクトを作成できるようにする
+## ✅ DLLを読み込んでプロジェクトを作成できるようにする
 
 まず、Hostプロジェクトを作る。プロジェクトの作成、管理、プラグインの読み込みはHostの管轄。
 
@@ -135,9 +135,9 @@ Host.csproj
 └─Hosting
   └─PluginHost
 
-## 🚧 ビューを作る
+## ✅ ビューを作る
 
-### 🚧 1階層だけの場合の実装を作る
+### ✅ 1階層だけの場合の実装を作る
 
 int, bool, string, float, class, array, reference, subtyping のビューを作る。
 
@@ -153,9 +153,42 @@ public class PluginsDataTemplateSelector
 }
 ```
 
-### 🚧 Editコマンドを作って任意の階層を作れる
+### ✅ Editコマンドを作って任意の階層を作れる
 
 class, arrayなどは編集ボタンを押すと編集ブロックが開いて編集できる。
+
+### 🚧 配列の実装
+
+ビューとしては NamedArray, RawArray の2種類を用意する。
+
+EditorEntryNameAttribute 属性をつけたstringプロパティに設定されたデータは、
+配列のタイトルとしてリストに並べられる。
+
+この属性を持たないデータの配列は、+ ボタンと × ボタンで追加・削除ができる
+シンプルなリストのGUIが提供される。
+
+インラインのGUIでは、ボタンのみを表示する。
+
+### 🚧 参照の実装
+
+EditorEntryReference 属性をつけたintプロパティには、
+ルートが直接持つリストへの参照を選んで設定できる。
+このプロパティは「参照」になる。
+
+EditorMaster 属性をルートが直接持つ配列につけてIdプロパティの名前を指定すると、
+それが「マスター」になる。
+
+参照はGUI上ではボタンで表示される。
+マスターが名前を持っていれば、今選んでいる要素の名前もインラインで表示される。
+ボタンを押すと次のレイヤーにマスターの内容が開き、要素を選択できる。
+
+## 🚧 継承のサポート
+
+継承のサポートはモデルの役目。
+
+SubtypingModel は SubtypeOptions クラスを持ち、 SubtypeOptions は NullOption または JustOption のリストを持つ。 SubtypeOptions は複数の SubtypingModel 間で共有される。
+
+EditorSubtyping 属性をクラスに複数つけられる。属性に指定した型から実際の型を選ぶことができる。
 
 ## 🚧 プラグインから見たModel
 
@@ -164,23 +197,20 @@ DataModelがReactivePropertyに依存しないようになれば、プラグイ�
 プラグイン側で ReactiveProperty の知識を不要にするだけであれば、ReactiveProperty版と素直なバージョンを両方提供すればいい気もする。
 例えば IntModel は、 ReactiveProperty<int> 型のプロパティと int 型のプロパティをどちらも提供する。
 
-## 🚧 継承のサポート
-
-継承のサポートはモデルの役目。
-
-SubtypingModel は SubtypeOptions クラスを持ち、 SubtypeOptions は NullOption または JustOption のリストを持つ。 SubtypeOptions は複数の SubtypingModel 間で共有される。
-
 ## 🚧 コマンドサポート
 
 データDLLで拡張メソッドを使ってコマンドを追加できるようにしたい。
 
 ```csharp
-[EditorCommandSource]
-public static class Commands
+[EditorRoot]
+public class MyData
 {
-    // 第一引数が T で、戻り値も同じ T であるようなstaticメソッドがコマンドとして利用できる。
-    [Name("ID自動設定")]
-    public static MyType[] UpdateId(this MyType[] source)
+    // EditorCommand 属性に指定したメソッドについて、プロパティの型・引数・戻り値が一致していればコマンドとして利用できる。
+    // GUI のレイヤータイトルを右クリックするとコマンドが一覧表示される。
+    [EditorCommand(nameof(UpdateId))]
+    public IdData[] Entries { get; set; }
+
+    public static IdData[] UpdateId(IdData[] source)
     {
         return source.Select((x, i) => source with { Id = i }).ToArray();
     }
