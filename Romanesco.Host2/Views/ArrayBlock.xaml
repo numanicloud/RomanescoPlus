@@ -13,6 +13,10 @@
     <ResourceDictionary Source="EditorTemplates.xaml"/>
   </UserControl.Resources>
 
+  <d:UserControl.DataContext>
+    <vm:ArrayViewModel/>
+  </d:UserControl.DataContext>
+
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" MinWidth="200"/>
@@ -27,7 +31,7 @@
       </Grid.RowDefinitions>
 
       <Grid Background="SteelBlue" Margin="4">
-        <TextBlock Text="{Binding Title}"></TextBlock>
+        <TextBlock Text="{Binding Title}" Foreground="White"/>
       </Grid>
 
       <ItemsControl ItemsSource="{Binding Items}" Grid.Row="1" Margin="6">
@@ -75,21 +79,6 @@
             </Grid>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
-
-        <d:ItemsControl.ItemsSource>
-          <x:Array Type="vm:IDataViewModel">
-            <vm:IntViewModel>
-              <vm:IntViewModel.Model>
-                <entities:IntModel Title="Hoge"/>
-              </vm:IntViewModel.Model>
-            </vm:IntViewModel>
-            <vm:IntViewModel>
-              <vm:IntViewModel.Model>
-                <entities:IntModel Title="Piyo"/>
-              </vm:IntViewModel.Model>
-            </vm:IntViewModel>
-          </x:Array>
-        </d:ItemsControl.ItemsSource>
       </ItemsControl>
 
       <Button Content="追加" Grid.Row="2" Margin="4"

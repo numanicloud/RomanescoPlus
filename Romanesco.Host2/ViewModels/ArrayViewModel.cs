@@ -23,6 +23,43 @@ public class ArrayViewModel : IDataViewModel
     public ReactiveCommand<IDataViewModel> MoveUpCommand { get; } = new();
     public ReactiveCommand<IDataViewModel> MoveDownCommand { get; } = new();
 
+    public ArrayViewModel()
+    {
+        // デザインデータ
+        _model = new ArrayModel()
+        {
+            ElementType = new TypeId(typeof(int[])),
+            Prototype = new IntModel()
+            {
+                Title = "Item"
+            },
+            Title = "Design"
+        };
+
+        Title = _model.Title;
+
+        Items = new ReactiveCollection<IDataViewModel>()
+        {
+            new IntViewModel()
+            {
+                Model = new IntModel()
+                {
+                    Data = { Value = 9 },
+                    Title = "Item"
+                },
+            },
+            new IntViewModel()
+            {
+                Model = new IntModel()
+                {
+                    Data = { Value = 19 },
+                    Title = "Item"
+                },
+            },
+        }.ToReadOnlyReactiveCollection();
+        DetailedData = new ReactiveProperty<IDataViewModel>();
+    }
+
     public ArrayViewModel(ArrayModel model, IViewModelFactory factory)
     {
         _model = model;
