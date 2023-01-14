@@ -12,11 +12,7 @@
         <ResourceDictionary Source="EditorTemplates.xaml"/>
     </UserControl.Resources>
 
-    <d:UserControl.DataContext>
-        <vm:ClassViewModel Title="Root"/>
-    </d:UserControl.DataContext>
-
-    <Grid>
+  <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" MinWidth="200"/>
             <ColumnDefinition Width="*"/>
@@ -33,11 +29,16 @@
             </Grid>
 
             <ItemsControl ItemsSource="{Binding Children}" Grid.Row="1" Margin="2"
-                          ItemTemplateSelector="{StaticResource TemplateSelector}"
-                          v:EditorEntry.Layout="Inline"
-                          v:EditorEntry.Trace="ClassMemberView"
                           Grid.IsSharedSizeScope="True">
-                <d:ItemsControl.ItemsSource>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <ContentControl Content="{Binding}"
+                                  Template="{StaticResource Entry}"
+                                  ContentTemplateSelector="{StaticResource TemplateSelector}"
+                                  v:EditorEntry.Layout="Inline" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+              <d:ItemsControl.ItemsSource>
                     <x:Array Type="vm:IDataViewModel">
                         <vm:IntViewModel>
                             <vm:IntViewModel.Model>

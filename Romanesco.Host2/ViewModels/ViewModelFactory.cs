@@ -27,11 +27,12 @@ internal class ViewModelFactory : IViewModelFactory
 
         if (model is ClassModel classModel)
         {
-            return new ClassViewModel()
-            {
-                Title = classModel.Title,
-                Children = classModel.Children.Select(x => Create(x, factory)).ToArray()
-            };
+            return new ClassViewModel(classModel, factory);
+        }
+
+        if (model is ArrayModel arrayModel)
+        {
+            return new ArrayViewModel(arrayModel, factory);
         }
 
         return new NoneViewModel();

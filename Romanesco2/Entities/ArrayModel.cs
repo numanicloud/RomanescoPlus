@@ -9,17 +9,17 @@ namespace Romanesco.DataModel.Entities;
 
 public class ArrayModel : IDataModel
 {
-    private readonly ObservableCollection<IDataModel> _items = new ();
+    private readonly ReactiveCollection<IDataModel> _items = new ();
 
     public required string Title { get; init; }
     public IReadOnlyReactiveProperty<string> TextOfValue { get; }
-    public ReadOnlyObservableCollection<IDataModel> Items { get; }
+    public ReadOnlyReactiveCollection<IDataModel> Items { get; }
     public required IDataModel Prototype { get; init; }
     public required TypeId ElementType { get; init; }
 
     public ArrayModel()
     {
-        Items = new ReadOnlyObservableCollection<IDataModel>(_items);
+        Items = _items.ToReadOnlyReactiveCollection();
 
         var collectionChanged = _items.ObserveAddChanged().DiscardValue()
             .Merge(_items.ObserveMoveChanged().DiscardValue())
@@ -39,18 +39,21 @@ public class ArrayModel : IDataModel
     public IDataModel New()
     {
         var item = Prototype.Clone($"Item({Title})");
-        _items.Add(item);
+        _items.AddOnScheduler(item);
         return item;
     }
 
     public void Move(int index, int newIndex)
     {
-        _items.Move(index, newIndex);
+        if (newIndex >= 0 && newIndex < _items.Count)
+        {
+            _items.MoveOnScheduler(index, newIndex);
+        }
     }
 
     public void RemoveAt(int index)
     {
-        _items.RemoveAt(index);
+        _items.RemoveAtOnScheduler(index);
     }
 
     public void Add(SerializedData data, IModelFactory loader)
@@ -58,7 +61,7 @@ public class ArrayModel : IDataModel
         var loaded = loader.LoadValue(Prototype.Clone(), data, loader);
         if (loaded != null)
         {
-            _items.Add(loaded);
+            _items.AddOnScheduler(loaded);
         }
     }
 
