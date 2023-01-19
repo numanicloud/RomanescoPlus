@@ -16,3 +16,13 @@ public class IntViewModel : IDataViewModel
     public string Title => Model.Title;
     public IObservable<Unit> OpenDetail { get; } = Observable.Never<Unit>();
 }
+
+[ContentProperty(nameof(Model))]
+public class StringViewModel : IDataViewModel
+{
+    public required StringModel Model { private get; init; }
+
+    public ReactiveProperty<string> Data => Model.Data;
+    public string Title => Model.Title;
+    public IObservable<Unit> OpenDetail { get; } = Observable.Never<Unit>();
+}

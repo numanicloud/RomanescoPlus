@@ -25,6 +25,14 @@ internal class ViewModelFactory : IViewModelFactory
             };
         }
 
+        if (model is StringModel stringModel)
+        {
+            return new StringViewModel()
+            {
+                Model = stringModel
+            };
+        }
+
         if (model is ClassModel classModel)
         {
             return new ClassViewModel(classModel, factory);
