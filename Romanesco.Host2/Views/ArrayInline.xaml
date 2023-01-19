@@ -12,7 +12,7 @@
     <ResourceDictionary Source="EditorTemplates.xaml"/>
   </UserControl.Resources>
 
-  <Button Content="編集" Height="25" Margin="3">
+  <Button Content="配列を編集" Height="25" Margin="3">
     <b:Interaction.Triggers>
       <b:EventTrigger EventName="Click">
         <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Edit"/>

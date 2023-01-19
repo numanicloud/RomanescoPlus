@@ -1,15 +1,17 @@
 ﻿using System.Reactive.Linq;
 using Reactive.Bindings;
+using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Entities;
 
 public class ClassModel : IDataModel
 {
     private readonly PropertyModel[] _properties = Array.Empty<PropertyModel>();
-    
+
     public required TypeId TypeId { get; init; }
     public required string Title { get; init; }
     public IReadOnlyReactiveProperty<string> TextOfValue { get; private init; }
+    public EntryName EntryName { get; private init; }
 
     public required PropertyModel[] Children
     {
@@ -25,12 +27,18 @@ public class ClassModel : IDataModel
                     return "{ " + string.Join(", ", records) + " }";
                 })
                 .ToReadOnlyReactiveProperty("");
+            EntryName =
+                _properties.FirstOrDefault(x =>
+                    x.Attributes.Any(attr => attr.Data is EditorNameAttribute)) is not { Model: StringModel nameModel }
+                    ? new NullEntryName()
+                    : new MutableEntryName(nameModel.Data);
         }
     }
 
     public ClassModel()
     {
         TextOfValue = new ReactiveProperty<string>();
+        EntryName = new NullEntryName();
     }
 
     public IDataModel Clone(string? title)
@@ -46,20 +54,27 @@ public class ClassModel : IDataModel
 
 public abstract class EntryName
 {
+    public abstract IReadOnlyReactiveProperty<string> Name { get; }
+
     public abstract EntryName Clone();
 }
 
 public class NullEntryName : EntryName
 {
+    public override IReadOnlyReactiveProperty<string> Name { get; } =
+        new ReactiveProperty<string>("{NullEntryName}");
+
     public override EntryName Clone() => new NullEntryName();
 }
 
-public class JustEntryName : EntryName
+public class MutableEntryName : EntryName
 {
-    public ReactiveProperty<string> Name { get; } = new ();
+    public override IReadOnlyReactiveProperty<string> Name { get; }
 
-    public override EntryName Clone() => new JustEntryName()
+    public MutableEntryName(IReadOnlyReactiveProperty<string> name)
     {
-        Name = { Value = Name.Value }
-    };
+        Name = name;
+    }
+
+    public override EntryName Clone() => new MutableEntryName(new ReactiveProperty<string>(Name.Value));
 }

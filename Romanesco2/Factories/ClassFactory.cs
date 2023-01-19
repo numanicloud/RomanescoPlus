@@ -14,7 +14,7 @@ public class ClassFactory : IModelFactory
         var props = from p in type.GetProperties()
             where p.GetIndexParameters().Length == 0
             where p.CanRead && p.CanWrite
-            let order = p.GetCustomAttribute<OrderAttribute>()?.Value ?? 0
+            let order = p.GetCustomAttribute<EditorOrder>()?.Value ?? 0
             let model = loader.LoadType(p.Name, p.PropertyType, loader)
             where model != null
             orderby order

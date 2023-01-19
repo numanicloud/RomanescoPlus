@@ -438,9 +438,9 @@ public class ClassFactoryTest
 
     private class Ordered
     {
-        [RomanescoPlus.Annotations.Order(2)]
+        [RomanescoPlus.Annotations.EditorOrder(2)]
         public int Int1 { get; set; }
-        [RomanescoPlus.Annotations.Order(1)]
+        [RomanescoPlus.Annotations.EditorOrder(1)]
         public int Int2 { get; set; }
     }
 

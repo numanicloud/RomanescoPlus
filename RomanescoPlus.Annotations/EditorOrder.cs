@@ -1,11 +1,11 @@
 ﻿namespace RomanescoPlus.Annotations;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-public class OrderAttribute : Attribute
+public class EditorOrder : Attribute
 {
     public int Value { get; }
 
-    public OrderAttribute(int value)
+    public EditorOrder(int value)
     {
         Value = value;
     }
