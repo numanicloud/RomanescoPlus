@@ -32,6 +32,10 @@ internal class ViewModelFactory : IViewModelFactory
 
         if (model is ArrayModel arrayModel)
         {
+            if (arrayModel.Prototype is ClassModel { EntryName: MutableEntryName })
+            {
+                return new NamedArrayViewModel(arrayModel, factory);
+            }
             return new ArrayViewModel(arrayModel, factory);
         }
 
