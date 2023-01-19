@@ -8,68 +8,63 @@
              xmlns:v="clr-namespace:Romanesco.Host2.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary Source="EditorTemplates.xaml"/>
-    </UserControl.Resources>
+  <UserControl.Resources>
+    <ResourceDictionary Source="EditorTemplates.xaml"/>
+  </UserControl.Resources>
 
   <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="200"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" MinWidth="200"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      
+      <Grid Background="SteelBlue" Margin="4">
+        <TextBlock Text="{Binding Title}" Foreground="White" VerticalAlignment="Center" Margin="2"/>
+      </Grid>
 
-            <Grid Background="SteelBlue" Margin="4">
-                <TextBlock Text="{Binding Title}" Foreground="White" VerticalAlignment="Center" Margin="2"/>
-            </Grid>
-
-            <ItemsControl ItemsSource="{Binding Children}" Grid.Row="1" Margin="2"
-                          Grid.IsSharedSizeScope="True">
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <ContentControl Content="{Binding}"
-                                  Template="{StaticResource Entry}"
+      <ItemsControl ItemsSource="{Binding Children}" Grid.Row="1" Margin="2"
+                    Grid.IsSharedSizeScope="True">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <ContentControl Content="{Binding}"
                                   ContentTemplateSelector="{StaticResource TemplateSelector}"
                                   v:EditorEntry.Layout="Inline" />
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-              <d:ItemsControl.ItemsSource>
-                    <x:Array Type="vm:IDataViewModel">
-                        <vm:IntViewModel>
-                            <vm:IntViewModel.Model>
-                                <m:IntModel Title="Hoge"/>
-                            </vm:IntViewModel.Model>
-                        </vm:IntViewModel>
-                        <vm:IntViewModel>
-                            <vm:IntViewModel.Model>
-                                <m:IntModel Title="Piyo"/>
-                            </vm:IntViewModel.Model>
-                        </vm:IntViewModel>
-                    </x:Array>
-                </d:ItemsControl.ItemsSource>
-            </ItemsControl>
-        </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <d:ItemsControl.ItemsSource>
+          <x:Array Type="vm:PropertyViewModel">
+            <vm:PropertyViewModel>
+              <vm:IntViewModel>
+                <m:IntModel Title="Hoge"/>
+              </vm:IntViewModel>
+            </vm:PropertyViewModel>
+            <vm:PropertyViewModel>
+              <vm:IntViewModel>
+                <m:IntModel Title="Piyo"/>
+              </vm:IntViewModel>
+            </vm:PropertyViewModel>
+          </x:Array>
+        </d:ItemsControl.ItemsSource>
+      </ItemsControl>
+    </Grid>
 
-        <Border Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Left"
+    <Border Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Left"
                 BorderThickness="1,0,0,0" BorderBrush="LightSteelBlue"/>
 
-        <ContentControl Content="{Binding DetailedData.Value}" Grid.Column="1"
-                        ContentTemplateSelector="{StaticResource TemplateSelector}"
-                        v:EditorEntry.Layout="Block"
-                        v:EditorEntry.Trace="DetailView">
-            <d:ContentControl.Content>
-                <vm:IntViewModel>
-                    <vm:IntViewModel.Model>
-                        <m:IntModel Title="Fuga"/>
-                    </vm:IntViewModel.Model>
-                </vm:IntViewModel>
-            </d:ContentControl.Content>
-        </ContentControl>
+    <ContentControl Content="{Binding DetailedData.Value}" Grid.Column="1"
+                    ContentTemplateSelector="{StaticResource TemplateSelector}"
+                    v:EditorEntry.Layout="Block"
+                    v:EditorEntry.Trace="DetailView">
+      <d:ContentControl.Content>
+        <vm:IntViewModel/>
+      </d:ContentControl.Content>
+    </ContentControl>
 
-    </Grid>
+  </Grid>
 </UserControl>

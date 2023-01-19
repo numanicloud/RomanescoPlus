@@ -11,9 +11,9 @@ namespace Romanesco.Host2.ViewModels;
 public class ClassViewModel : IDataViewModel
 {
     private readonly Subject<Unit> _openDetailSubject = new();
-
+    
     public string Title { get; }
-    public IDataViewModel[] Children { get; }
+    public PropertyViewModel[] Children { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
     public IObservable<Unit> OpenDetail => _openDetailSubject;
 
@@ -22,9 +22,16 @@ public class ClassViewModel : IDataViewModel
     // ArrayViewModelはどうせViewModel内でFactoryを呼び出すのでFactoryを使えばいいかも
     public ClassViewModel(ClassModel model, IViewModelFactory factory)
     {
+        Children = model.Children
+            .Select(x => new PropertyViewModel()
+            {
+                Data = factory.Create(x.Model, factory)
+            })
+            .ToArray();
+
         Title = model.Title;
-        Children = model.Children.Select(x => factory.Create(x.Model, factory)).ToArray();
-        DetailedData = Children.Select(x => x.OpenDetail.Select(_ => x))
+
+        DetailedData = Children.Select(x => x.Data.OpenDetail.Select(_ => x.Data))
             .Merge()
             .ToReadOnlyReactiveProperty(new NoneViewModel());
     }

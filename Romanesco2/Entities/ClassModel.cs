@@ -21,7 +21,7 @@ public class ClassModel : IDataModel
                 .Merge()
                 .Select(_ =>
                 {
-                    var records = _properties.Select(x => $"{x.Name} = {x.Model.TextOfValue.Value}");
+                    var records = _properties.Select(x => $"{x.Model.Title} = {x.Model.TextOfValue.Value}");
                     return "{ " + string.Join(", ", records) + " }";
                 })
                 .ToReadOnlyReactiveProperty("");

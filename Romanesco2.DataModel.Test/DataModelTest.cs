@@ -35,7 +35,6 @@ internal class DataModelTest
             {
                 new PropertyModel()
                 {
-                    Name = "Flag",
                     Model = flagModel
                 }
             },

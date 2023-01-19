@@ -20,7 +20,6 @@ public class ClassFactory : IModelFactory
             orderby order
             select new PropertyModel()
             {
-                Name = p.Name,
                 Model = model,
                 Attributes = p.GetCustomAttributes()
                     .Select(attr => new ModelAttributeData()
@@ -50,7 +49,6 @@ public class ClassFactory : IModelFactory
                 .Select(x => LoadMember(x.Model, serialized.Children, loader) is {} child
                     ? new PropertyModel()
                     {
-                        Name = x.Name,
                         Attributes = x.Attributes,
                         Model = child
                     }
@@ -79,7 +77,7 @@ public class ClassFactory : IModelFactory
                 {
                     Data = factory.MakeData(x.Model, factory)
                         ?? throw new InvalidOperationException(),
-                    Label = x.Name
+                    Label = x.Model.Title
                 })
                 .ToArray(),
         };
@@ -94,8 +92,8 @@ public class ClassFactory : IModelFactory
 
         foreach (var child in model.Children)
         {
-            if (targetType.GetProperty(child.Name) is not { } p)
-                throw new InvalidOperationException($"Property {targetType.Name}.{child.Name} doesn't exist.");
+            if (targetType.GetProperty(child.Model.Title) is not { } p)
+                throw new InvalidOperationException($"Property {targetType.Name}.{child.Model.Title} doesn't exist.");
 
             p.SetValue(instance, decoder.Decode(child.Model, p.PropertyType, decoder));
         }

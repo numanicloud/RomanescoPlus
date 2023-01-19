@@ -4,19 +4,9 @@
                     x:Class="Romanesco.Host2.Views.EditorTemplates"
                     xmlns:v="clr-namespace:Romanesco.Host2.Views">
 
-  <ControlTemplate x:Key="Entry" TargetType="ContentControl">
-    <Grid VerticalAlignment="Top">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition SharedSizeGroup="Title" Width="Auto"/>
-        <ColumnDefinition SharedSizeGroup="Colon" Width="Auto"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-
-      <Label Content="{Binding Title}" HorizontalAlignment="Right"/>
-      <Label Content=":" Grid.Column="1"/>
-      <ContentPresenter Grid.Column="2"/>
-    </Grid>
-  </ControlTemplate>
+  <DataTemplate DataType="{x:Type vm:PropertyViewModel}" x:Key="PropertyInline">
+    <v:PropertyInline DataContext="{Binding}"/>
+  </DataTemplate>
 
   <DataTemplate DataType="{x:Type vm:IntViewModel}" x:Key="IntInline">
     <TextBox Text="{Binding Data.Value}" VerticalContentAlignment="Center"
@@ -49,6 +39,7 @@
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ClassInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ArrayInline}"/>
+      <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource PropertyInline}"/>
     </v:DataModelTemplateSelector.DefaultInlineTemplates>
     <v:DataModelTemplateSelector.DefaultBlockTemplates>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>

@@ -12,10 +12,10 @@ public class ArrayViewModel : IDataViewModel
 {
     private readonly ArrayModel _model;
     private readonly Subject<Unit> _openDetailSubject = new();
-
-    public string Title { get; }
+    
     public ReadOnlyReactiveCollection<IDataViewModel> Items { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
+    public string Title => _model.Title;
     public IObservable<Unit> OpenDetail => _openDetailSubject;
 
     public ReactiveCommand NewCommand { get; } = new();
@@ -35,8 +35,6 @@ public class ArrayViewModel : IDataViewModel
             },
             Title = "Design"
         };
-
-        Title = _model.Title;
 
         Items = new ReactiveCollection<IDataViewModel>()
         {
@@ -63,7 +61,6 @@ public class ArrayViewModel : IDataViewModel
     public ArrayViewModel(ArrayModel model, IViewModelFactory factory)
     {
         _model = model;
-        Title = model.Title;
         
         Items = model.Items.ToReadOnlyReactiveCollection(x => factory.Create(x, factory));
 

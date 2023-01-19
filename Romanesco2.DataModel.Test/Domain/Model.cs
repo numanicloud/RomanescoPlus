@@ -12,7 +12,6 @@ internal static class Model
             TypeId = new TypeId(type),
             Children = children.Select(x => new PropertyModel()
             {
-                Name = x.Title,
                 Model = x,
                 Attributes = System.Array.Empty<ModelAttributeData>()
             }).ToArray()
