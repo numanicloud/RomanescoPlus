@@ -6,47 +6,49 @@ namespace Romanesco.Host2.ViewModels;
 public interface IViewModelFactory
 {
     IDataViewModel Create(IDataModel model, IViewModelFactory factory);
+    IDataViewModel Create(PropertyModel model, IViewModelFactory factory);
 }
 
 internal class ViewModelFactory : IViewModelFactory
 {
+    public IDataViewModel Create(PropertyModel model)
+    {
+        return Create(model, this);
+    }
+
     public IDataViewModel Create(IDataModel model)
     {
         return Create(model, this);
     }
 
+    public IDataViewModel Create(PropertyModel model, IViewModelFactory factory)
+    {
+        return model.Model switch
+        {
+            IntModel intModel => new IntViewModel { Model = intModel },
+            StringModel stringModel => new StringViewModel { Model = stringModel },
+            ClassModel classModel => new ClassViewModel(classModel, factory),
+            ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } arrayModel =>
+                new NamedArrayViewModel(arrayModel, factory)
+                {
+                    EditorCommands = model.Commands
+                },
+            ArrayModel arrayModel => new ArrayViewModel(arrayModel, factory),
+            _ => new NoneViewModel()
+        };
+    }
+    
     public IDataViewModel Create(IDataModel model, IViewModelFactory factory)
     {
-        if (model is IntModel intModel)
+        return model switch
         {
-            return new IntViewModel()
-            {
-                Model = intModel
-            };
-        }
-
-        if (model is StringModel stringModel)
-        {
-            return new StringViewModel()
-            {
-                Model = stringModel
-            };
-        }
-
-        if (model is ClassModel classModel)
-        {
-            return new ClassViewModel(classModel, factory);
-        }
-
-        if (model is ArrayModel arrayModel)
-        {
-            if (arrayModel.Prototype is ClassModel { EntryName: MutableEntryName })
-            {
-                return new NamedArrayViewModel(arrayModel, factory);
-            }
-            return new ArrayViewModel(arrayModel, factory);
-        }
-
-        return new NoneViewModel();
+            IntModel intModel => new IntViewModel { Model = intModel },
+            StringModel stringModel => new StringViewModel { Model = stringModel },
+            ClassModel classModel => new ClassViewModel(classModel, factory),
+            ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } arrayModel =>
+                new NamedArrayViewModel(arrayModel, factory),
+            ArrayModel arrayModel => new ArrayViewModel(arrayModel, factory),
+            _ => new NoneViewModel()
+        };
     }
 }

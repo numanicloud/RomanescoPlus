@@ -17,6 +17,7 @@ internal class NamedArrayViewModel : IDataViewModel
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
     public string Title => _model.Title;
     public IObservable<Unit> OpenDetail => _openDetailSubject;
+    public EditorCommand[] EditorCommands { get; init; } = Array.Empty<EditorCommand>();
     
     public ReactiveCommand NewCommand { get; } = new();
     public ReactiveCommand<NamedArrayItemViewModel> RemoveCommand { get; } = new();

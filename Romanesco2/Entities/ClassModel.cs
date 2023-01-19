@@ -52,6 +52,11 @@ public class ClassModel : IDataModel
     }
 }
 
+public class EditorCommand
+{
+    public required string Title { get; init; }
+}
+
 public abstract class EntryName
 {
     public abstract IReadOnlyReactiveProperty<string> Name { get; }

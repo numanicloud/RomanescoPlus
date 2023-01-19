@@ -24,7 +24,17 @@
         <RowDefinition Height="30"/>
       </Grid.RowDefinitions>
 
-      <local:LayerTitle DataContext="{Binding}"/>
+      <local:LayerTitle DataContext="{Binding}">
+        <local:LayerTitle.ContextMenu>
+          <ContextMenu ItemsSource="{Binding EditorCommands}">
+            <ContextMenu.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Title}"/>
+              </DataTemplate>
+            </ContextMenu.ItemTemplate>
+          </ContextMenu>
+        </local:LayerTitle.ContextMenu>
+      </local:LayerTitle>
 
       <ListView Grid.Row="1" Margin="4"
                 ItemsSource="{Binding Items}"

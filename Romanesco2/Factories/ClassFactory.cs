@@ -25,14 +25,20 @@ public class ClassFactory : IModelFactory
                     .Select(attr => new ModelAttributeData()
                     {
                         Data = attr
-                    })
+                    }),
+                Commands = p.GetCustomAttributes()
+                    .OfType<EditorCommandTargetAttribute>()
+                    .Select(x => new EditorCommand()
+                    {
+                        Title = x.CommandName
+                    }).ToArray()
             };
 
         return new ClassModel()
         {
             TypeId = new TypeId(type),
             Title = title,
-            Children = props.ToArray(),
+            Children = props.ToArray()
         };
     }
 

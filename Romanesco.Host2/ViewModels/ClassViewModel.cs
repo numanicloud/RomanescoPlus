@@ -25,7 +25,7 @@ public class ClassViewModel : IDataViewModel
         Children = model.Children
             .Select(x => new PropertyViewModel()
             {
-                Data = factory.Create(x.Model, factory)
+                Data = factory.Create(x, factory)
             })
             .ToArray();
 

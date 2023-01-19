@@ -1,4 +1,5 @@
-﻿using Romanesco.EditorModel.Projects;
+﻿using Romanesco.DataModel.Entities;
+using Romanesco.EditorModel.Projects;
 
 namespace Romanesco.Host2.ViewModels;
 
