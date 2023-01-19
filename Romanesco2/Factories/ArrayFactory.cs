@@ -1,4 +1,5 @@
-﻿using Romanesco.DataModel.Entities;
+﻿using System.Reflection;
+using Romanesco.DataModel.Entities;
 using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Factories;
@@ -65,5 +66,20 @@ public class ArrayFactory : IModelFactory
         }
 
         return result;
+    }
+
+    public bool LoadRawValue(IDataModel source, object rawValue, IModelFactory loader)
+    {
+        if (source is not ArrayModel model) return false;
+        if (rawValue is not object[] array) return false;
+
+        model.Clear();
+        foreach (var item in array)
+        {
+            var newItem = model.New();
+            loader.LoadRawValue(newItem, item, loader);
+        }
+
+        return true;
     }
 }

@@ -9,4 +9,5 @@ public interface IModelFactory
     IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader);
     SerializedData? MakeData(IDataModel model, IModelFactory factory);
     object? Decode(IDataModel source, Type targetType, IModelFactory decoder);
+    bool LoadRawValue(IDataModel source, object rawValue, IModelFactory loader);
 }

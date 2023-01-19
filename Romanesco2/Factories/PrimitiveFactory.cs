@@ -81,4 +81,30 @@ public class PrimitiveFactory : IModelFactory
             _ => null
         };
     }
+
+    public bool LoadRawValue(IDataModel source, object rawValue, IModelFactory loader)
+    {
+        if (source is IntModel im && rawValue is int i)
+        {
+            im.Data.Value = i;
+        }
+        else if (source is BoolModel bm && rawValue is bool b)
+        {
+            bm.Data.Value = b;
+        }
+        else if (source is StringModel sm && rawValue is string s)
+        {
+            sm.Data.Value = s;
+        }
+        else if (source is FloatModel fm && rawValue is float f)
+        {
+            fm.Data.Value = f;
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

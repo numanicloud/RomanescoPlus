@@ -106,4 +106,24 @@ public class ClassFactory : IModelFactory
 
         return instance;
     }
+
+    public bool LoadRawValue(IDataModel source, object rawValue, IModelFactory loader)
+    {
+        if (source is not ClassModel model) return false;
+
+        var type = rawValue.GetType();
+        if (!type.IsClass || new TypeId(type) != model.TypeId) return false;
+
+        foreach (var child in model.Children)
+        {
+            if (type.GetProperty(child.Model.Title) is not { } p) continue;
+
+            var childValue = p.GetValue(rawValue);
+            if (childValue is null) continue;
+
+            loader.LoadRawValue(child.Model, childValue, loader);
+        }
+
+        return true;
+    }
 }

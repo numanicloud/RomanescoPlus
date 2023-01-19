@@ -65,6 +65,11 @@ public class ArrayModel : IDataModel
         }
     }
 
+    public void Clear()
+    {
+        _items.ClearOnScheduler();
+    }
+
     public IDataModel Clone(string? title = null)
     {
         var result = new ArrayModel()

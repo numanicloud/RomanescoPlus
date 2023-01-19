@@ -105,4 +105,27 @@ public class AggregatedFactory : IModelFactory
 
         return null;
     }
+
+    public bool LoadRawValue(IDataModel source, object rawValue)
+    {
+        return LoadRawValue(source, rawValue, this);
+    }
+
+    public bool LoadRawValue(IDataModel source, object rawValue, IModelFactory loader)
+    {
+        foreach (var factory in Factories)
+        {
+            if (factory.LoadRawValue(source, rawValue, loader))
+            {
+                return true;
+            }
+        }
+
+        if (ClassFactory.LoadRawValue(source, rawValue, loader))
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
