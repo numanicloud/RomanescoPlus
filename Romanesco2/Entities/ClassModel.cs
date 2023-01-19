@@ -5,23 +5,23 @@ namespace Romanesco.DataModel.Entities;
 
 public class ClassModel : IDataModel
 {
-    private readonly IDataModel[] _children = Array.Empty<IDataModel>();
+    private readonly PropertyModel[] _properties = Array.Empty<PropertyModel>();
     
     public required TypeId TypeId { get; init; }
     public required string Title { get; init; }
     public IReadOnlyReactiveProperty<string> TextOfValue { get; private init; }
 
-    public required IDataModel[] Children
+    public required PropertyModel[] Children
     {
-        get => _children;
+        get => _properties;
         init
         {
-            _children = value;
-            TextOfValue = _children.Select(x => x.TextOfValue)
+            _properties = value;
+            TextOfValue = _properties.Select(x => x.Model.TextOfValue)
                 .Merge()
                 .Select(_ =>
                 {
-                    var records = _children.Select(x => $"{x.Title} = {x.TextOfValue.Value}");
+                    var records = _properties.Select(x => $"{x.Name} = {x.Model.TextOfValue.Value}");
                     return "{ " + string.Join(", ", records) + " }";
                 })
                 .ToReadOnlyReactiveProperty("");
@@ -42,4 +42,24 @@ public class ClassModel : IDataModel
             Children = Children.Select(x => x.Clone()).ToArray(),
         };
     }
+}
+
+public abstract class EntryName
+{
+    public abstract EntryName Clone();
+}
+
+public class NullEntryName : EntryName
+{
+    public override EntryName Clone() => new NullEntryName();
+}
+
+public class JustEntryName : EntryName
+{
+    public ReactiveProperty<string> Name { get; } = new ();
+
+    public override EntryName Clone() => new JustEntryName()
+    {
+        Name = { Value = Name.Value }
+    };
 }

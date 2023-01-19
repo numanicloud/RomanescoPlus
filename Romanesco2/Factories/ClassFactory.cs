@@ -15,14 +15,25 @@ public class ClassFactory : IModelFactory
             where p.GetIndexParameters().Length == 0
             where p.CanRead && p.CanWrite
             let order = p.GetCustomAttribute<OrderAttribute>()?.Value ?? 0
+            let model = loader.LoadType(p.Name, p.PropertyType, loader)
+            where model != null
             orderby order
-            select loader.LoadType(p.Name, p.PropertyType, loader);
+            select new PropertyModel()
+            {
+                Name = p.Name,
+                Model = model,
+                Attributes = p.GetCustomAttributes()
+                    .Select(attr => new ModelAttributeData()
+                    {
+                        Data = attr
+                    })
+            };
 
         return new ClassModel()
         {
             TypeId = new TypeId(type),
             Title = title,
-            Children = props.FilterNull().ToArray(),
+            Children = props.ToArray(),
         };
     }
 
@@ -36,7 +47,14 @@ public class ClassFactory : IModelFactory
             Title = model.Title,
             TypeId = model.TypeId,
             Children = model.Children
-                .Select(x => LoadMember(x, serialized.Children, loader) ?? x.Clone())
+                .Select(x => LoadMember(x.Model, serialized.Children, loader) is {} child
+                    ? new PropertyModel()
+                    {
+                        Name = x.Name,
+                        Attributes = x.Attributes,
+                        Model = child
+                    }
+                    : x.Clone())
                 .ToArray()
         };
 
@@ -59,8 +77,9 @@ public class ClassFactory : IModelFactory
         {
             Children = c.Children.Select(x => new SerializedMember()
                 {
-                    Data = factory.MakeData(x, factory) ?? throw new InvalidOperationException(),
-                    Label = x.Title
+                    Data = factory.MakeData(x.Model, factory)
+                        ?? throw new InvalidOperationException(),
+                    Label = x.Name
                 })
                 .ToArray(),
         };
@@ -75,10 +94,10 @@ public class ClassFactory : IModelFactory
 
         foreach (var child in model.Children)
         {
-            if (targetType.GetProperty(child.Title) is not { } p)
-                throw new InvalidOperationException();
+            if (targetType.GetProperty(child.Name) is not { } p)
+                throw new InvalidOperationException($"Property {targetType.Name}.{child.Name} doesn't exist.");
 
-            p.SetValue(instance, decoder.Decode(child, p.PropertyType, decoder));
+            p.SetValue(instance, decoder.Decode(child.Model, p.PropertyType, decoder));
         }
 
         return instance;

@@ -34,6 +34,7 @@ internal class ArrayTest
             .Sequence(x => x.Children);
 
         members.Next()
+            .Select(x => x.Model)
             .Type<ArrayModel>()
             .Empty(x => x.Items.ToArray())
             .AreEqual("Ints", x => x.Title)
@@ -47,7 +48,7 @@ internal class ArrayTest
     {
         var model = _aggregatedFactory!.LoadType(typeof(ClassWithArray));
 
-        if (model is not ClassModel { Children: [ArrayModel { Items: [] } array] })
+        if (model is not ClassModel { Children: [{ Model: ArrayModel { Items: [] } array }] })
         {
             throw FailWithTestRequirement();
         }
@@ -69,7 +70,7 @@ internal class ArrayTest
     {
         var model = _aggregatedFactory!.LoadType(typeof(ClassWithArray));
 
-        if (model is not ClassModel { Children: [ArrayModel { Items: [] } array] })
+        if (model is not ClassModel { Children: [{ Model: ArrayModel { Items: [] } array }] })
         {
             throw FailWithTestRequirement();
         }
@@ -103,15 +104,18 @@ internal class ArrayTest
             .Sequence(x => x.Children.ToArray());
 
         using var members2 = members.Next()
+            .Select(x => x.Model)
             .Type<ArrayModel>()
             .Select(x => x.Prototype)
             .Type<ClassModel>()
             .Sequence(x => x.Children.ToArray());
 
         members2.Next()
+            .Select(x => x.Model)
             .Type<IntModel>();
 
         members2.Next()
+            .Select(x => x.Model)
             .Type<BoolModel>();
     }
 
@@ -120,13 +124,13 @@ internal class ArrayTest
     {
         var model = _aggregatedFactory!.LoadType(typeof(ArrayWithComplex));
 
-        if (model is not ClassModel { Children: [ArrayModel { Items: [] } array] })
+        if (model is not ClassModel { Children: [ { Model: ArrayModel { Items: [] } array }] })
         {
             throw FailWithTestRequirement();
         }
 
         var item = array.New();
-        if (item is not ClassModel { Children: [IntModel i, BoolModel b] })
+        if (item is not ClassModel { Children: [ { Model: IntModel i }, { Model: BoolModel b }] })
         {
             throw FailWithTestRequirement();
         }

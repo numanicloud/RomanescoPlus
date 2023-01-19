@@ -22,7 +22,7 @@ public class PrimitiveFactory : IModelFactory
         if (type == typeof(string))
             return new StringModel()
             {
-                Title = title,
+                Title = title
             };
 
         if (type == typeof(float))

@@ -2,7 +2,7 @@
 
 internal record AssertionContext<TActual>(TActual Actual)
 {
-    public AssertionContext<T> Type<T>()
+    public AssertionContext<T> Type<T>() where T : TActual
     {
         Assert.That(Actual, Is.TypeOf<T>());
         if (Actual is not T cast) throw new Exception();

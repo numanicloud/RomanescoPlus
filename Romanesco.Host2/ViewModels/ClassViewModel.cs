@@ -23,7 +23,7 @@ public class ClassViewModel : IDataViewModel
     public ClassViewModel(ClassModel model, IViewModelFactory factory)
     {
         Title = model.Title;
-        Children = model.Children.Select(x => factory.Create(x, factory)).ToArray();
+        Children = model.Children.Select(x => factory.Create(x.Model, factory)).ToArray();
         DetailedData = Children.Select(x => x.OpenDetail.Select(_ => x))
             .Merge()
             .ToReadOnlyReactiveProperty(new NoneViewModel());

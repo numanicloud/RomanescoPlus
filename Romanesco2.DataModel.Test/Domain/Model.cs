@@ -10,7 +10,12 @@ internal static class Model
         {
             Title = title,
             TypeId = new TypeId(type),
-            Children = children
+            Children = children.Select(x => new PropertyModel()
+            {
+                Name = x.Title,
+                Model = x,
+                Attributes = System.Array.Empty<ModelAttributeData>()
+            }).ToArray()
         };
     }
 

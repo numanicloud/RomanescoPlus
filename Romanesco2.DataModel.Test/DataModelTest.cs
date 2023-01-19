@@ -31,7 +31,14 @@ internal class DataModelTest
         var model = new ClassModel()
         {
             TypeId = new TypeId(typeof(DataModelTest)),
-            Children = new[] { flagModel },
+            Children = new[]
+            {
+                new PropertyModel()
+                {
+                    Name = "Flag",
+                    Model = flagModel
+                }
+            },
             Title = "Root"
         };
 
