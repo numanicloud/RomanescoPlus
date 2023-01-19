@@ -4,6 +4,20 @@
              StartupUri="/Views/MainWindow.xaml">
 
     <Application.Resources>
+      <ResourceDictionary>
+        <Style TargetType="{x:Type Grid}">
+          <Setter Property="Focusable" Value="False"/>
+        </Style>
+        <Style TargetType="{x:Type ContentControl}">
+          <Setter Property="Focusable" Value="False"/>
+        </Style>
+        <Style TargetType="{x:Type Rectangle}">
+          <Setter Property="Focusable" Value="False"/>
+        </Style>
+        <Style TargetType="{x:Type ItemsControl}">
+          <Setter Property="Focusable" Value="False"/>
+        </Style>
+      </ResourceDictionary>
     </Application.Resources>
 
 </Application>

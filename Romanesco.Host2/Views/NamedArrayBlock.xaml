@@ -28,33 +28,34 @@
 
       <ListView Grid.Row="1" Margin="4"
                 ItemsSource="{Binding Items}"
-                SelectedItem="{Binding SelectedItem.Value}">
+                SelectedItem="{Binding SelectedItem.Value}"
+                HorizontalContentAlignment="Stretch">
         <ListView.ItemTemplate>
           <DataTemplate>
-            <Grid>
+            <Grid Tag="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
+                  HorizontalAlignment="Stretch">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="1*"/>
               </Grid.ColumnDefinitions>
 
+              <Grid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="削除"
+                            Command="{Binding PlacementTarget.Tag.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
+                            CommandParameter="{Binding}"/>
+                  <MenuItem Header="上へ"
+                            Command="{Binding PlacementTarget.Tag.MoveUpCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
+                            CommandParameter="{Binding}"/>
+                  <MenuItem Header="下へ"
+                            Command="{Binding PlacementTarget.Tag.MoveDownCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
+                            CommandParameter="{Binding}"/>
+                </ContextMenu>
+              </Grid.ContextMenu>
+
               <Rectangle Fill="LightSteelBlue" Margin="0,0,2,0"/>
               
-              <TextBlock Text="{Binding EntryName.Value}" Grid.Column="1"
-                         Tag="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}">
-                <TextBlock.ContextMenu>
-                  <ContextMenu>
-                    <MenuItem Header="削除"
-                              Command="{Binding PlacementTarget.Tag.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                              CommandParameter="{Binding}"/>
-                    <MenuItem Header="上へ"
-                              Command="{Binding PlacementTarget.Tag.MoveUpCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                              CommandParameter="{Binding}"/>
-                    <MenuItem Header="下へ"
-                              Command="{Binding PlacementTarget.Tag.MoveDownCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                              CommandParameter="{Binding}"/>
-                  </ContextMenu>
-                </TextBlock.ContextMenu>
-              </TextBlock>
+              <TextBlock Text="{Binding EntryName.Value}" Grid.Column="1"/>
             </Grid>
           </DataTemplate>
         </ListView.ItemTemplate>
