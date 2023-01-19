@@ -30,9 +30,7 @@
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
-      <Grid Background="SteelBlue" Margin="4">
-        <TextBlock Text="{Binding Title}" Foreground="White"/>
-      </Grid>
+      <local:LayerTitle DataContext="{Binding}"/>
 
       <ItemsControl ItemsSource="{Binding Items}" Grid.Row="1" Margin="6">
         <ItemsControl.ItemTemplate>

@@ -24,9 +24,7 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
       
-      <Grid Background="SteelBlue" Margin="4">
-        <TextBlock Text="{Binding Title}" Foreground="White" VerticalAlignment="Center" Margin="2"/>
-      </Grid>
+      <v:LayerTitle DataContext="{Binding}"/>
 
       <ItemsControl ItemsSource="{Binding Children}" Grid.Row="1" Margin="2"
                     Grid.IsSharedSizeScope="True">
