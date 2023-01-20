@@ -71,15 +71,25 @@ public class ArrayFactory : IModelFactory
     public bool LoadRawValue(IDataModel source, object rawValue, IModelFactory loader)
     {
         if (source is not ArrayModel model) return false;
-        if (rawValue is not object[] array) return false;
 
-        model.Clear();
-        foreach (var item in array)
+        return rawValue switch
         {
-            var newItem = model.New();
-            loader.LoadRawValue(newItem, item, loader);
-        }
+            int[] ints => Load(ints),
+            bool[] bools => Load(bools),
+            float[] floats => Load(floats),
+            object[] objects => Load(objects),
+            _ => false
+        };
 
-        return true;
+        bool Load<T>(T[] arr) where T : notnull
+        {
+            model.Clear();
+            foreach (var item in arr)
+            {
+                var newItem = model.New();
+                loader.LoadRawValue(newItem, item, loader);
+            }
+            return true;
+        }
     }
 }

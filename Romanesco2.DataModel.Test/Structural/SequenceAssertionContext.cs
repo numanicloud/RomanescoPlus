@@ -6,7 +6,7 @@ internal record SequenceAssertionContext<T>(T[] Context) : IDisposable
 
     public AssertionContext<T> Next()
     {
-        Assert.That(_index, Is.LessThanOrEqualTo(Context.Length));
+        Assert.That(_index + 1, Is.LessThanOrEqualTo(Context.Length));
 
         var result = Context[_index];
         _index++;
