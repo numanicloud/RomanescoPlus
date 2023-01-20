@@ -27,9 +27,15 @@
       <local:LayerTitle DataContext="{Binding}">
         <local:LayerTitle.ContextMenu>
           <ContextMenu ItemsSource="{Binding EditorCommands}">
+            <ContextMenu.ItemContainerStyle>
+              <Style TargetType="MenuItem">
+                <Setter Property="Command" Value="{Binding RunCommand}"></Setter>
+              </Style>
+            </ContextMenu.ItemContainerStyle>
             <ContextMenu.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Title}"/>
+                <TextBlock Text="{Binding MethodName}" HorizontalAlignment="Stretch">
+                </TextBlock>
               </DataTemplate>
             </ContextMenu.ItemTemplate>
           </ContextMenu>

@@ -7,6 +7,8 @@ namespace Romanesco.DataModel.Factories;
 
 public class ClassFactory : IModelFactory
 {
+    public required IEditorCommandObserver CommandObserver { private get; init; }
+
     public IDataModel? LoadType(string title, Type type, IModelFactory loader)
     {
         if (!type.IsClass) return null;
@@ -26,7 +28,7 @@ public class ClassFactory : IModelFactory
                     {
                         Data = attr
                     }),
-                Commands = EditorCommand.ExtractCommands(type, p, model)
+                Commands = EditorCommand.ExtractCommands(type, p, model, CommandObserver)
             };
 
         return new ClassModel()

@@ -1,14 +1,33 @@
 ﻿using System.Reflection;
+using Reactive.Bindings;
 using Romanesco.DataModel.Factories;
 using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Entities;
+
+public interface IEditorCommandObserver
+{
+    void RunCommand(EditorCommand command);
+}
 
 public class EditorCommand
 {
     public required TypeId HostType { get; init; }
     public required string MethodName { get; init; }
     public required IDataModel Data { get; init; }
+    public required IEditorCommandObserver Observer { get; init; }
+    public ReactiveCommand RunCommand { get; }
+
+    public EditorCommand()
+    {
+        RunCommand = new ReactiveCommand();
+        RunCommand.Subscribe(_ => Run());
+    }
+
+    public void Run()
+    {
+        Observer.RunCommand(this);
+    }
 
     public void Run(Assembly assembly, IModelFactory factory)
     {
@@ -33,7 +52,8 @@ public class EditorCommand
     public static EditorCommand[] ExtractCommands(
         Type hostType,
         PropertyInfo propertyInfo,
-        IDataModel propertyModel)
+        IDataModel propertyModel,
+        IEditorCommandObserver observer)
     {
         return propertyInfo.GetCustomAttributes()
             .OfType<EditorCommandTargetAttribute>()
@@ -54,7 +74,8 @@ public class EditorCommand
             {
                 MethodName = x.CommandName,
                 HostType = new TypeId(hostType),
-                Data = propertyModel
+                Data = propertyModel,
+                Observer = observer
             }).ToArray();
     }
 }

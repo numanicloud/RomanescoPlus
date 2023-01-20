@@ -5,16 +5,28 @@ using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Test;
 
+internal class NullCommandObserver : IEditorCommandObserver
+{
+    public void RunCommand(EditorCommand command)
+    {
+    }
+}
+
 internal class CustomCommandTest
 {
+    private NullCommandObserver? _commandObserver;
     private AggregatedFactory? _aggregatedFactory;
 
     [SetUp]
     public void Setup()
     {
+        _commandObserver = new NullCommandObserver();
         _aggregatedFactory = new AggregatedFactory()
         {
-            ClassFactory = new ClassFactory(),
+            ClassFactory = new ClassFactory()
+            {
+                CommandObserver = _commandObserver
+            },
             Factories = new IModelFactory[]
             {
                 new PrimitiveFactory(),
@@ -30,7 +42,8 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(ValidCommandSubject),
             typeof(ValidCommandSubject).GetProperty("Array")!,
-            model!);
+            model!,
+            _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()
@@ -47,7 +60,8 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(NonStaticCommandSubject),
             typeof(NonStaticCommandSubject).GetProperty("Array")!,
-            model!);
+            model!,
+            _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()
@@ -61,7 +75,8 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(PrivateCommandSubject),
             typeof(PrivateCommandSubject).GetProperty("Array")!,
-            model!);
+            model!,
+            _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()
@@ -75,7 +90,7 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(InvalidParameterSubject),
             typeof(InvalidParameterSubject).GetProperty("Array")!,
-            model!);
+            model!, _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()
@@ -89,7 +104,7 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(UnnecessaryParameterSubject),
             typeof(UnnecessaryParameterSubject).GetProperty("Array")!,
-            model!);
+            model!, _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()
@@ -103,7 +118,7 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(InvalidReturnSubject),
             typeof(InvalidReturnSubject).GetProperty("Array")!,
-            model!);
+            model!, _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()
@@ -117,7 +132,7 @@ internal class CustomCommandTest
         var commands = EditorCommand.ExtractCommands(
             typeof(InvalidPropertyTypeSubject),
             typeof(InvalidPropertyTypeSubject).GetProperty("Array")!,
-            model!);
+            model!, _commandObserver!);
 
         using var sequence = commands.BeginAssertion()
             .NotNull()

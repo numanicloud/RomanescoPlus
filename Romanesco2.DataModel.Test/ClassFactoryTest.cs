@@ -16,7 +16,7 @@ public class ClassFactoryTest
     {
         _aggregatedFactory = new AggregatedFactory()
         {
-            ClassFactory = new ClassFactory(),
+            ClassFactory = new ClassFactory() { CommandObserver = new NullCommandObserver() },
             Factories = new IModelFactory[]
             {
                 new PrimitiveFactory()

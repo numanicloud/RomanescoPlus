@@ -20,7 +20,7 @@ public class MyRootType
             .ToArray();
 
         var targets = self.Except(constant);
-        var nextId = constant.Max(x => x.Id) + 1;
+        var nextId = constant.Any() ? constant.Max(x => x.Id) + 1 : 1;
         foreach (var item in targets)
         {
             item.Id = nextId++;
