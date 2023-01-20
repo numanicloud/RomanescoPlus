@@ -26,12 +26,7 @@ public class ClassFactory : IModelFactory
                     {
                         Data = attr
                     }),
-                Commands = p.GetCustomAttributes()
-                    .OfType<EditorCommandTargetAttribute>()
-                    .Select(x => new EditorCommand()
-                    {
-                        Title = x.CommandName
-                    }).ToArray()
+                Commands = EditorCommand.ExtractCommands(type, p, model)
             };
 
         return new ClassModel()
