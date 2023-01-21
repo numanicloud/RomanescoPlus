@@ -12,7 +12,8 @@ public class ArrayViewModel : IDataViewModel
 {
     private readonly ArrayModel _model;
     private readonly Subject<Unit> _openDetailSubject = new();
-    
+    private readonly Subject<Unit> _closeDetailSubject = new();
+
     public ReadOnlyReactiveCollection<IDataViewModel> Items { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
     public string Title => _model.Title;
@@ -67,6 +68,7 @@ public class ArrayViewModel : IDataViewModel
         DetailedData = Items.ToCollectionChanged()
             .SelectMany(_ => Items.Select(x => x.OpenDetail.Select(_ => x)))
             .Merge()
+            .Merge(_closeDetailSubject.Select(_ => new NoneViewModel()))
             .ToReadOnlyReactiveProperty(new NoneViewModel());
 
         NewCommand.Subscribe(New);
@@ -83,6 +85,7 @@ public class ArrayViewModel : IDataViewModel
     public void Remove(IDataViewModel item)
     {
         _model.RemoveAt(Items.IndexOf(item));
+        _closeDetailSubject.OnNext(Unit.Default);
     }
 
     public void MoveUp(IDataViewModel item)

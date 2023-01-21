@@ -25,16 +25,12 @@ internal class ViewModelFactory : IViewModelFactory
     {
         return model.Model switch
         {
-            IntModel intModel => new IntViewModel { Model = intModel },
-            StringModel stringModel => new StringViewModel { Model = stringModel },
-            ClassModel classModel => new ClassViewModel(classModel, factory),
             ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } arrayModel =>
                 new NamedArrayViewModel(arrayModel, factory)
                 {
                     EditorCommands = model.Commands
                 },
-            ArrayModel arrayModel => new ArrayViewModel(arrayModel, factory),
-            _ => new NoneViewModel()
+            _ => Create(model.Model, factory)
         };
     }
     
@@ -44,6 +40,8 @@ internal class ViewModelFactory : IViewModelFactory
         {
             IntModel intModel => new IntViewModel { Model = intModel },
             StringModel stringModel => new StringViewModel { Model = stringModel },
+            FloatModel floatModel => new FloatViewModel { Model = floatModel },
+            BoolModel boolModel => new BoolViewModel { Model = boolModel },
             ClassModel classModel => new ClassViewModel(classModel, factory),
             ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } arrayModel =>
                 new NamedArrayViewModel(arrayModel, factory),

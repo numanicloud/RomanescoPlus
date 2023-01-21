@@ -18,6 +18,17 @@
                Margin="3" Padding="2" Height="25"/>
   </DataTemplate>
 
+  <DataTemplate DataType="{x:Type vm:FloatViewModel}" x:Key="FloatInline">
+    <TextBox Text="{Binding Data.Value}" VerticalContentAlignment="Center"
+             Margin="3" Padding="2" Height="25"/>
+  </DataTemplate>
+
+  <DataTemplate DataType="{x:Type vm:BoolViewModel}" x:Key="BoolInline">
+    <CheckBox IsChecked="{Binding Data.Value}" VerticalContentAlignment="Center"
+              Margin="3" Padding="2" Height="20" Width="20"
+              HorizontalAlignment="Left"/>
+  </DataTemplate>
+
   <DataTemplate DataType="{x:Type vm:ClassViewModel}" x:Key="ClassBlock">
     <v:ClassBlock DataContext="{Binding}"/>
   </DataTemplate>
@@ -50,6 +61,8 @@
     <v:DataModelTemplateSelector.DefaultInlineTemplates>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource IntInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource StringInline}"/>
+      <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource FloatInline}"/>
+      <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource BoolInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ClassInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ArrayInline}"/>

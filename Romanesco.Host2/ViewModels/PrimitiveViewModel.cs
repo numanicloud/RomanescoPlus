@@ -26,3 +26,23 @@ public class StringViewModel : IDataViewModel
     public string Title => Model.Title;
     public IObservable<Unit> OpenDetail { get; } = Observable.Never<Unit>();
 }
+
+[ContentProperty(nameof(Model))]
+public class FloatViewModel : IDataViewModel
+{
+    public required FloatModel Model { private get; init; }
+
+    public ReactiveProperty<float> Data => Model.Data;
+    public string Title => Model.Title;
+    public IObservable<Unit> OpenDetail { get; } = Observable.Never<Unit>();
+}
+
+[ContentProperty(nameof(Model))]
+public class BoolViewModel : IDataViewModel
+{
+    public required BoolModel Model { private get; init; }
+
+    public ReactiveProperty<bool> Data => Model.Data;
+    public string Title => Model.Title;
+    public IObservable<Unit> OpenDetail { get; } = Observable.Never<Unit>();
+}
