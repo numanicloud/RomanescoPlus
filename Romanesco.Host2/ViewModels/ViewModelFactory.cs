@@ -1,16 +1,15 @@
 ﻿using System.Linq;
+using Reactive.Bindings;
+using Romanesco.DataModel;
 using Romanesco.DataModel.Entities;
+using RomanescoPlus.Annotations;
 
 namespace Romanesco.Host2.ViewModels;
 
-public interface IViewModelFactory
-{
-    IDataViewModel Create(IDataModel model, IViewModelFactory factory);
-    IDataViewModel Create(PropertyModel model, IViewModelFactory factory);
-}
-
 internal class ViewModelFactory : IViewModelFactory
 {
+    private readonly MasterDataContext _masterDataContext = new();
+
     public IDataViewModel Create(PropertyModel model)
     {
         return Create(model, this);
@@ -23,17 +22,50 @@ internal class ViewModelFactory : IViewModelFactory
 
     public IDataViewModel Create(PropertyModel model, IViewModelFactory factory)
     {
+        if (model.Model is IntModel intModel)
+        {
+            var attr = model.Attributes
+                .Select(x => x.Data)
+                .OfType<EditorReferenceAttribute>()
+                .FirstOrDefault();
+            if (attr is not null)
+            {
+                return new IntIdReferenceViewModel()
+                {
+                    Model = intModel,
+                    Master = _masterDataContext.GetMaster(attr.MasterName)
+                        .ToReadOnlyReactiveProperty(new NullMasterDataZZ())
+                };
+            }
+        }
+
         return model.Model switch
         {
-            ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } arrayModel =>
-                new NamedArrayViewModel(arrayModel, factory)
-                {
-                    EditorCommands = model.Commands
-                },
+            ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } namedArray =>
+                InstantiateNamedArray(namedArray),
             _ => Create(model.Model, factory)
         };
+
+        NamedArrayViewModel InstantiateNamedArray(ArrayModel namedArray)
+        {
+            var vm = new NamedArrayViewModel(namedArray, factory)
+            {
+                EditorCommands = model.Commands
+            };
+
+            model.Attributes
+                .Select(x => x.Data)
+                .OfType<EditorMasterAttribute>()
+                .FirstOrDefault()
+                .IfNotNull(attr =>
+                {
+                    _masterDataContext.RegisterMaster(vm, attr.MasterName);
+                });
+
+            return vm;
+        }
     }
-    
+
     public IDataViewModel Create(IDataModel model, IViewModelFactory factory)
     {
         return model switch

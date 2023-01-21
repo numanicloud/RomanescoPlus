@@ -1,9 +1,10 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
+using System.Security.Cryptography;
 
 namespace Romanesco.DataModel;
 
-internal static class Helpers
+public static class Helpers
 {
     public static IObservable<T> FilterNull<T>(this IObservable<T?> source)
         where T : class
@@ -12,6 +13,18 @@ internal static class Helpers
         {
             Source = source
         };
+    }
+
+    public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source)
+        where T : struct
+    {
+        foreach (var item in source)
+        {
+            if (item is not null)
+            {
+                yield return item.Value;
+            }
+        }
     }
 
     public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source)
@@ -29,6 +42,15 @@ internal static class Helpers
     public static IObservable<Unit> DiscardValue<T>(this IObservable<T> source)
     {
         return source.Select(_ => Unit.Default);
+    }
+
+    public static void IfNotNull<T>(this T? subject, Action<T> onTrue)
+        where T : class
+    {
+        if (subject is not null)
+        {
+            onTrue(subject);
+        }
     }
 
     private class FilterNullObservable<T> : IObservable<T>

@@ -13,7 +13,12 @@ public class MyRootType
     
     [EditorCommandTarget(nameof(ApplyId))]
     public NamedClass[] Master { get; set; }
-    
+
+    [EditorMaster("Master", nameof(Try.Master.Id))]
+    public Master[] MasterList { get; set; }
+    [EditorReference("Master")]
+    public int SampleMasterId { get; set; }
+
     public static NamedClass[] ApplyId(NamedClass[] self)
     {
         var constant = self.GroupBy(x => x.Id)
@@ -42,4 +47,12 @@ public class NamedClass
     public int Id { get; set; }
     [EditorName] public string Name { get; set; } = "DefaultName";
     public int Value { get; set; }
+}
+
+public class Master
+{
+    public int Id { get; set; }
+    [EditorName]
+    public string Name { get; set; }
+    public bool IsEnabled { get; set; }
 }

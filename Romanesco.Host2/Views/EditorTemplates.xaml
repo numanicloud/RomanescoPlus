@@ -57,6 +57,10 @@
     <v:ArrayInline DataContext="{Binding}"/>
   </DataTemplate>
 
+  <DataTemplate DataType="{x:Type vm:IntIdReferenceViewModel}" x:Key="IntIdInline">
+    <v:IntIdReferenceInline DataContext="{Binding}"/>
+  </DataTemplate>
+
   <v:DataModelTemplateSelector x:Key="TemplateSelector">
     <v:DataModelTemplateSelector.DefaultInlineTemplates>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource IntInline}"/>
@@ -68,6 +72,7 @@
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ArrayInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NamedArrayInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource PropertyInline}"/>
+      <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource IntIdInline}"/>
     </v:DataModelTemplateSelector.DefaultInlineTemplates>
     <v:DataModelTemplateSelector.DefaultBlockTemplates>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>
