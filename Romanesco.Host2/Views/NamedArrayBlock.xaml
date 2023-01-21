@@ -57,15 +57,14 @@
 
               <Grid.ContextMenu>
                 <ContextMenu>
-                  <MenuItem Header="削除"
-                            Command="{Binding PlacementTarget.Tag.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                            CommandParameter="{Binding}"/>
-                  <MenuItem Header="上へ"
-                            Command="{Binding PlacementTarget.Tag.MoveUpCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                            CommandParameter="{Binding}"/>
-                  <MenuItem Header="下へ"
-                            Command="{Binding PlacementTarget.Tag.MoveDownCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                            CommandParameter="{Binding}"/>
+                  <MenuItem Header="削除" CommandParameter="{Binding}"
+                            Command="{Binding PlacementTarget.Tag.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                  <MenuItem Header="上へ" CommandParameter="{Binding}"
+                            Command="{Binding PlacementTarget.Tag.MoveUpCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                  <MenuItem Header="下へ" CommandParameter="{Binding}"
+                            Command="{Binding PlacementTarget.Tag.MoveDownCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                  <MenuItem Header="複製" CommandParameter="{Binding}"
+                            Command="{Binding PlacementTarget.Tag.DuplicateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"></MenuItem>
                 </ContextMenu>
               </Grid.ContextMenu>
 

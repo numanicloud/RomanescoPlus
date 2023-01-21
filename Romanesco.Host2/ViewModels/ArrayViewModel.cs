@@ -23,6 +23,7 @@ public class ArrayViewModel : IDataViewModel
     public ReactiveCommand<IDataViewModel> RemoveCommand { get; } = new();
     public ReactiveCommand<IDataViewModel> MoveUpCommand { get; } = new();
     public ReactiveCommand<IDataViewModel> MoveDownCommand { get; } = new();
+    public ReactiveCommand<IDataViewModel> DuplicateCommand { get; } = new();
 
     public ArrayViewModel()
     {
@@ -75,6 +76,7 @@ public class ArrayViewModel : IDataViewModel
         RemoveCommand.Subscribe(Remove);
         MoveUpCommand.Subscribe(MoveUp);
         MoveDownCommand.Subscribe(MoveDown);
+        DuplicateCommand.Subscribe(Duplicate);
     }
 
     public void New()
@@ -98,6 +100,12 @@ public class ArrayViewModel : IDataViewModel
     {
         var index = Items.IndexOf(item);
         _model.Move(index, index + 1);
+    }
+
+    public void Duplicate(IDataViewModel item)
+    {
+        var index = Items.IndexOf(item);
+        _model.Duplicate(index);
     }
 
     public void Edit()

@@ -72,6 +72,8 @@
                   <MenuItem Header="下へ"
                             Command="{Binding PlacementTarget.Tag.MoveDownCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
                             CommandParameter="{Binding}"/>
+                  <MenuItem Header="複製" CommandParameter="{Binding}"
+                            Command="{Binding PlacementTarget.Tag.DuplicateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
                 </ContextMenu>
               </Grid.ContextMenu>
             </Grid>

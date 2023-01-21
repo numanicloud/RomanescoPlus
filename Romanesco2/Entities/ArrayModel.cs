@@ -70,6 +70,12 @@ public class ArrayModel : IDataModel
         _items.ClearOnScheduler();
     }
 
+    public void Duplicate(int index)
+    {
+        var clone = _items[index].Clone();
+        _items.InsertOnScheduler(index + 1, clone);
+    }
+
     public IDataModel Clone(string? title = null)
     {
         var result = new ArrayModel()
