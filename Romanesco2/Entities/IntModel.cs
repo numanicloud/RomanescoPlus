@@ -2,6 +2,8 @@
 
 public class IntModel : PrimitiveModel<int>
 {
+    public bool IsId { get; init; } = false;
+
     public IntModel() : base(default(int).ToString())
     {
     }

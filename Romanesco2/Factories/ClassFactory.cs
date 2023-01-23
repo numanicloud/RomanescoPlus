@@ -31,11 +31,31 @@ public class ClassFactory : IModelFactory
                 Commands = EditorCommand.ExtractCommands(type, p, model, CommandObserver)
             };
 
+        var array = props.ToArray();
+
+        array.ToList()
+            .ForEach(item =>
+            {
+                if (item.Model is ArrayModel { Prototype: ClassModel prototype } masterProperty)
+                {
+                    var attr = item.Attributes.Select(x => x.Data)
+                        .OfType<EditorMasterAttribute>()
+                        .FirstOrDefault();
+                    if (attr == null) return;
+
+                    prototype.IdProvider = new ClassIdProvider()
+                    {
+                        Self = prototype,
+                        PropertyName = attr.IdPropertyName,
+                    };
+                }
+            });
+
         return new ClassModel()
         {
             TypeId = new TypeId(type),
             Title = title,
-            Children = props.ToArray()
+            Children = array
         };
     }
 

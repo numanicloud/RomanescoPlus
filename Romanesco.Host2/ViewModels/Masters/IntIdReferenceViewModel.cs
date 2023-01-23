@@ -23,10 +23,14 @@ internal class IntIdReferenceViewModel : IDataViewModel
         SelectedItem.FilterNull()
             .Select(x => x.Data)
             .OfType<ClassViewModel>()
-            .Select(x => x.IdElement)
+            .Select(x => x.IdProvider?.IdModel)
             .FilterNull()
             .SelectMany(x => x.Data)
-            .Subscribe(m => Model!.Data.Value = m);
+            .Subscribe(m =>
+            {
+                if (Model is null) return;
+                Model.Data.Value = m;
+            });
     }
 
     public void Edit()

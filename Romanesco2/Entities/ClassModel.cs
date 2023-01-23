@@ -13,6 +13,8 @@ public class ClassModel : IDataModel
     public IReadOnlyReactiveProperty<string> TextOfValue { get; private init; }
     public EntryName EntryName { get; private init; }
 
+    public ClassIdProvider? IdProvider { get; set; }
+
     public required PropertyModel[] Children
     {
         get => _properties;
@@ -43,12 +45,37 @@ public class ClassModel : IDataModel
 
     public IDataModel Clone(string? title)
     {
-        return new ClassModel()
+        var result = new ClassModel()
         {
             Title = title ?? Title,
             TypeId = TypeId,
             Children = Children.Select(x => x.Clone()).ToArray(),
         };
+        if (IdProvider is not null)
+        {
+            result.IdProvider = new ClassIdProvider()
+            {
+                PropertyName = IdProvider.PropertyName,
+                Self = result
+            };
+        }
+        return result;
+    }
+}
+
+public class ClassIdProvider
+{
+    private IntModel? _idModel;
+
+    public required ClassModel Self { get; init; }
+    public required string PropertyName { get; init; }
+    public IntModel IdModel => _idModel ??= GetIdModel();
+
+    public IntModel GetIdModel()
+    {
+        return Self.Children
+            .FirstOrDefault(x => x.Model.Title == PropertyName)
+            ?.Model as IntModel ?? throw new InvalidOperationException();
     }
 }
 
