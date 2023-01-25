@@ -5,22 +5,22 @@ namespace Romanesco.Host2.ViewModels;
 
 internal class MasterDataContext
 {
-    private readonly Dictionary<string, ReactiveProperty<MasterDataZZ>> _namedMasters = new();
+    private readonly Dictionary<string, ReactiveProperty<MasterData>> _namedMasters = new();
 
-    public ReactiveProperty<MasterDataZZ> GetMaster(string masterName)
+    public ReactiveProperty<MasterData> GetMaster(string masterName)
     {
         if (_namedMasters.TryGetValue(masterName, out var value))
         {
             return value;
         }
 
-        _namedMasters[masterName] = new ReactiveProperty<MasterDataZZ>(new NullMasterDataZZ());
+        _namedMasters[masterName] = new ReactiveProperty<MasterData>(new NullMasterData());
         return _namedMasters[masterName];
     }
 
     public void RegisterMaster(NamedArrayViewModel viewModel, string masterName)
     {
-        var master = new InitializedMasterDataZZ()
+        var master = new InitializedMasterData()
         {
             Choices = viewModel.Items
         };
@@ -31,6 +31,6 @@ internal class MasterDataContext
             return;
         }
 
-        _namedMasters[masterName] = new ReactiveProperty<MasterDataZZ>(master);
+        _namedMasters[masterName] = new ReactiveProperty<MasterData>(master);
     }
 }

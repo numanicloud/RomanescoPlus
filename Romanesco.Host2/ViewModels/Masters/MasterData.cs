@@ -2,15 +2,15 @@
 
 namespace Romanesco.Host2.ViewModels;
 
-internal abstract class MasterDataZZ
+internal abstract class MasterData
 {
 }
 
-internal class NullMasterDataZZ : MasterDataZZ
+internal class NullMasterData : MasterData
 {
 }
 
-internal class InitializedMasterDataZZ : MasterDataZZ
+internal class InitializedMasterData : MasterData
 {
     public required ReadOnlyReactiveCollection<NamedArrayItemViewModel> Choices { get; init; }
 }

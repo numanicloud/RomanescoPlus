@@ -34,7 +34,7 @@ internal class ViewModelFactory : IViewModelFactory
                 {
                     Model = intModel,
                     Master = _masterDataContext.GetMaster(attr.MasterName)
-                        .ToReadOnlyReactiveProperty(new NullMasterDataZZ())
+                        .ToReadOnlyReactiveProperty(new NullMasterData())
                 };
             }
         }
