@@ -7,4 +7,5 @@ public interface IEditorView
 {
     Task<ProjectCreationResult> SetupProjectCreationAsync();
     Task<IAbsoluteFilePathExt?> PickSavePathAsync(IAbsoluteFilePathExt defaultPath);
+    Task<IAbsoluteFilePathExt?> PickLoadPathAsync(IAbsoluteFilePathExt? defaultPath);
 }

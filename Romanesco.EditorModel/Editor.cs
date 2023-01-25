@@ -66,11 +66,37 @@ public class Editor : IEditorCommandObserver
         var serializable = new SerializedProject()
         {
             Data = _modelFactory.MakeData(project.DataModel),
-            DllPath = project.DllPath.Value.PathString
+            DllPath = project.DllPath.Value.PathString,
+            RootTypeFullName = project.DataModel is ClassModel cm ? cm.TypeId.FullName : throw new InvalidOperationException()
         };
-        
+
         await using var file = path.Create();
         await JsonSerializer.SerializeAsync(file, serializable);
+    }
+
+    public async Task LoadAsync()
+    {
+        var path = await View.PickLoadPathAsync(null);
+        if (path is null) return;
+
+        await using var file = path.OpenRead();
+        var project = await JsonSerializer.DeserializeAsync<SerializedProject>(file);
+        if (project is null) return;
+
+        var dllPath = project.DllPath.AssertAbsoluteFilePathExt();
+        if (!dllPath.Exists()) throw new InvalidOperationException("プロジェクトで使用するDLLが失われています");
+
+        var assembly = Assembly.LoadFrom(dllPath.PathString);
+        var type = assembly.GetType(project.RootTypeFullName);
+        if (type is null) return;
+
+        var model = _modelFactory.LoadType(type);
+        model = _modelFactory.LoadValue(model, project.Data);
+
+        CurrentProject.Value = new Project(path, dllPath)
+        {
+            DataModel = model
+        };
     }
 
     public void RunCommand(EditorCommand command)

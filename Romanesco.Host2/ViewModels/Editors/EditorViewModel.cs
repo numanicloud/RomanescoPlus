@@ -43,6 +43,8 @@ public class EditorViewModel : ViewModel, IEditorView
 
     public void SaveNewProjectAsync() => _model.SaveAsAsync().Forget();
 
+    public void LoadProjectAsync() => _model.LoadAsync().Forget();
+
     public async Task<ProjectCreationResult> SetupProjectCreationAsync()
     {
         var vm = new ProjectCreationWizardViewModel();
@@ -65,6 +67,19 @@ public class EditorViewModel : ViewModel, IEditorView
         {
             return null;
         }
+
+        return r[0].AssertAbsoluteFilePathExt();
+    }
+
+    public async Task<IAbsoluteFilePathExt?> PickLoadPathAsync(IAbsoluteFilePathExt? defaultPath)
+    {
+        var message = new OpeningFileSelectionMessage("LoadProject")
+        {
+        };
+
+        await Messenger.RaiseAsync(message);
+
+        if (message.Response is not { } r || r.Length < 1) return null;
 
         return r[0].AssertAbsoluteFilePathExt();
     }
