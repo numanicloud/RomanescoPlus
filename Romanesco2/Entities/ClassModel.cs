@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reactive.Linq;
 using Reactive.Bindings;
+using Romanesco.DataModel.Entities.Component;
 using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Entities;

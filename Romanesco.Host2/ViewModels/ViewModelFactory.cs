@@ -2,6 +2,7 @@
 using Reactive.Bindings;
 using Romanesco.DataModel;
 using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Entities.Component;
 using RomanescoPlus.Annotations;
 
 namespace Romanesco.Host2.ViewModels;

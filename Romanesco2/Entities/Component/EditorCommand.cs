@@ -3,7 +3,7 @@ using Reactive.Bindings;
 using Romanesco.DataModel.Factories;
 using RomanescoPlus.Annotations;
 
-namespace Romanesco.DataModel.Entities;
+namespace Romanesco.DataModel.Entities.Component;
 
 public interface IEditorCommandObserver
 {

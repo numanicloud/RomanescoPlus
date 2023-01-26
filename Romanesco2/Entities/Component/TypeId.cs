@@ -1,4 +1,4 @@
-﻿namespace Romanesco.DataModel.Entities;
+﻿namespace Romanesco.DataModel.Entities.Component;
 
 public record TypeId
 {

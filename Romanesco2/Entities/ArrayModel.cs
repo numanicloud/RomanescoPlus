@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Romanesco.DataModel.Entities.Component;
 using Romanesco.DataModel.Factories;
 using Romanesco.DataModel.Serialization;
 
@@ -41,7 +42,7 @@ public class ArrayModel : IDataModel
     public IDataModel New()
     {
         var item = Prototype.Clone($"Item({Title})");
-        _items.AddOnScheduler(item);
+        _items.Add(item);
         return item;
     }
 
@@ -49,13 +50,13 @@ public class ArrayModel : IDataModel
     {
         if (newIndex >= 0 && newIndex < _items.Count)
         {
-            _items.MoveOnScheduler(index, newIndex);
+            _items.Move(index, newIndex);
         }
     }
 
     public void RemoveAt(int index)
     {
-        _items.RemoveAtOnScheduler(index);
+        _items.RemoveAt(index);
     }
 
     public void Add(SerializedData data, IModelFactory loader)
@@ -67,13 +68,6 @@ public class ArrayModel : IDataModel
         }
     }
 
-    public void AddRange(SerializedData[] data, IModelFactory loader)
-    {
-        var models = data.Select(x => loader.LoadValue(Prototype.Clone(), x, loader))
-            .FilterNull();
-        _items.AddRangeOnScheduler(models);
-    }
-
     public void Clear()
     {
         _items.Clear();
@@ -82,7 +76,7 @@ public class ArrayModel : IDataModel
     public void Duplicate(int index)
     {
         var clone = _items[index].Clone();
-        _items.InsertOnScheduler(index + 1, clone);
+        _items.Insert(index + 1, clone);
     }
 
     public IDataModel Clone(string? title = null)

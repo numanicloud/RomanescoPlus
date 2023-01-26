@@ -1,4 +1,4 @@
-﻿using Romanesco.DataModel.Entities;
+﻿using Romanesco.DataModel.Entities.Component;
 using Romanesco.DataModel.Factories;
 using Romanesco.DataModel.Test.Structural;
 using RomanescoPlus.Annotations;

@@ -1,4 +1,5 @@
 ﻿using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Entities.Component;
 using Romanesco.DataModel.Test.Structural;
 
 namespace Romanesco.DataModel.Test.Domain;

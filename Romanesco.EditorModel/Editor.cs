@@ -6,6 +6,7 @@ using Numani.TypedFilePath.Infrastructure;
 using Romanesco.DataModel.Entities;
 using Romanesco.DataModel.Factories;
 using Romanesco.EditorModel.Projects;
+using Romanesco.DataModel.Entities.Component;
 
 namespace Romanesco.EditorModel;
 

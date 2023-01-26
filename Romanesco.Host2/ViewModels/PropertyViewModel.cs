@@ -1,5 +1,5 @@
 ﻿using System.Windows.Markup;
-using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Entities.Component;
 
 namespace Romanesco.Host2.ViewModels;
 
