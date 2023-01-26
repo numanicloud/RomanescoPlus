@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -19,9 +20,10 @@ public class ArrayModel : IDataModel
 
     public ArrayModel()
     {
-        Items = _items.ToReadOnlyReactiveCollection();
+        Items = _items.ToReadOnlyReactiveCollection(Scheduler.Immediate);
 
         var collectionChanged = _items.ObserveAddChanged().DiscardValue()
+            .Merge(_items.ObserveAddChangedItems().DiscardValue())
             .Merge(_items.ObserveMoveChanged().DiscardValue())
             .Merge(_items.ObserveRemoveChanged().DiscardValue())
             .Merge(_items.ObserveReplaceChanged().DiscardValue())
@@ -61,13 +63,20 @@ public class ArrayModel : IDataModel
         var loaded = loader.LoadValue(Prototype.Clone(), data, loader);
         if (loaded != null)
         {
-            _items.AddOnScheduler(loaded);
+            _items.Add(loaded);
         }
+    }
+
+    public void AddRange(SerializedData[] data, IModelFactory loader)
+    {
+        var models = data.Select(x => loader.LoadValue(Prototype.Clone(), x, loader))
+            .FilterNull();
+        _items.AddRangeOnScheduler(models);
     }
 
     public void Clear()
     {
-        _items.ClearOnScheduler();
+        _items.Clear();
     }
 
     public void Duplicate(int index)

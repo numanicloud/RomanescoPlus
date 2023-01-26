@@ -31,6 +31,7 @@ public class ArrayFactory : IModelFactory
             ElementType = model.ElementType,
         };
 
+        result.Clear();
         foreach (var item in serialized.Items)
         {
             result.Add(item, loader);

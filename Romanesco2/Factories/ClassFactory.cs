@@ -64,7 +64,7 @@ public class ClassFactory : IModelFactory
         if (target is not ClassModel model
             || data is not SerializedClass serialized) return null;
 
-        return new ClassModel()
+        var result = new ClassModel()
         {
             Title = model.Title,
             TypeId = model.TypeId,
@@ -76,8 +76,18 @@ public class ClassFactory : IModelFactory
                         Model = child
                     }
                     : x.Clone())
-                .ToArray()
+                .ToArray(),
         };
+        if (model.IdProvider is not null)
+        {
+            result.IdProvider = new ClassIdProvider()
+            {
+                PropertyName = model.IdProvider.PropertyName,
+                Self = result
+            };
+        }
+
+        return result;
 
         static IDataModel? LoadMember(
             IDataModel targetMember,

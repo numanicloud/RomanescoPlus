@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using System;
+using System.Reactive.Linq;
 
 namespace Romanesco.Host2.ViewModels;
 

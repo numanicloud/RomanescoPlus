@@ -30,12 +30,9 @@ internal class ViewModelFactory : IViewModelFactory
                 .FirstOrDefault();
             if (attr is not null)
             {
-                return new IntIdReferenceViewModel()
-                {
-                    Model = intModel,
-                    Master = _masterDataContext.GetMaster(attr.MasterName)
-                        .ToReadOnlyReactiveProperty(new NullMasterData())
-                };
+                return new IntIdReferenceViewModel(intModel,
+                    _masterDataContext.GetMaster(attr.MasterName)
+                        .ToReadOnlyReactiveProperty(new NullMasterData()));
             }
         }
 

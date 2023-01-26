@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Diagnostics;
+using System.Reactive.Linq;
 using Reactive.Bindings;
 using RomanescoPlus.Annotations;
 
@@ -73,6 +74,7 @@ public class ClassIdProvider
 
     public IntModel GetIdModel()
     {
+        Debug.WriteLine("GetIdModel");
         return Self.Children
             .FirstOrDefault(x => x.Model.Title == PropertyName)
             ?.Model as IntModel ?? throw new InvalidOperationException();
