@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Entities.Component;
 
 namespace Romanesco.Host2.ViewModels;
 

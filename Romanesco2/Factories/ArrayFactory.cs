@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Romanesco.DataModel.Entities;
+using Romanesco.DataModel.Entities.Component;
 using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Factories;

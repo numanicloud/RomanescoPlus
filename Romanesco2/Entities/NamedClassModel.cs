@@ -5,7 +5,7 @@ namespace Romanesco.DataModel.Entities;
 
 public class NamedClassModel : IDataModel
 {
-    public required ClassModel Inner { private get; init; }
+    public required ClassModel Inner { get; init; }
     public required IReadOnlyReactiveProperty<string> EntryName { get; init; }
 
     public TypeId TypeId => Inner.TypeId;
@@ -24,7 +24,7 @@ public class NamedClassModel : IDataModel
     }
 }
 
-internal class NamedArrayModel : IDataModel
+public class NamedArrayModel : IDataModel
 {
     public required ArrayModel Inner { private get; init; }
 

@@ -12,7 +12,7 @@ public class AggregatedFactory : IModelFactory
 
     public IDataModel LoadType(Type type)
     {
-        return ClassFactory.LoadType(RootTitle, type, this)
+        return LoadType(RootTitle, type, this)
             ?? throw new Exception();
     }
 

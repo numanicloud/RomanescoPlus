@@ -8,35 +8,31 @@ using Romanesco.DataModel.Entities;
 
 namespace Romanesco.Host2.ViewModels;
 
-public class ClassViewModel : IDataViewModel
+public class NamedClassViewModel : IDataViewModel
 {
-    private readonly Subject<Unit> _openDetailSubject = new();
-    
+    private readonly Subject<Unit> _openDetailSubject = new ();
     public string Title { get; }
+    public IObservable<Unit> OpenDetail => _openDetailSubject;
     public PropertyViewModel[] Children { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
-    public IObservable<Unit> OpenDetail => _openDetailSubject;
     public ClassIdProvider? IdProvider { get; }
 
-    // ClassModelをClassViewModelに紐づけているように見せるために、引数でClassModelをとる必要がある
-    // だが、Factoryの呼び出しをコンストラクタで行うのは微妙な気がする
-    // ArrayViewModelはどうせViewModel内でFactoryを呼び出すのでFactoryを使えばいいかも
-    public ClassViewModel(ClassModel model, IViewModelFactory factory)
+    public NamedClassViewModel(NamedClassModel model, IViewModelFactory factory)
     {
-        Children = model.Children
+        Children = model.Inner.Children
             .Select(x => new PropertyViewModel()
             {
                 Model = x,
-                Data = factory.Create(x, factory),
+                Data = factory.Create(x, factory)
             })
             .ToArray();
-
-        Title = model.Title;
-        IdProvider = model.IdProvider;
 
         DetailedData = Children.Select(x => x.Data.OpenDetail.Select(_ => x.Data))
             .Merge()
             .ToReadOnlyReactiveProperty(new NoneViewModel());
+
+        Title = model.Title;
+        IdProvider = model.Inner.IdProvider;
     }
 
     public void Edit()
