@@ -18,7 +18,7 @@ internal class IntIdReferenceViewModel : IDataViewModel
     public ReadOnlyReactiveProperty<MasterData> Master { get; }
     public string Title => Model.Title;
     public IObservable<Unit> OpenDetail => _openDetailSubject;
-    public ReactiveProperty<NamedArrayItemViewModel?> SelectedItem { get; } = new();
+    public ReactiveProperty<INamedArrayItem?> SelectedItem { get; } = new();
 
     public IntIdReferenceViewModel(IntModel model, ReadOnlyReactiveProperty<MasterData> master)
     {

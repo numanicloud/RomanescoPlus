@@ -12,5 +12,5 @@ internal class NullMasterData : MasterData
 
 internal class InitializedMasterData : MasterData
 {
-    public required ReadOnlyReactiveCollection<NamedArrayItemViewModel> Choices { get; init; }
+    public required ReadOnlyReactiveCollection<INamedArrayItem> Choices { get; init; }
 }

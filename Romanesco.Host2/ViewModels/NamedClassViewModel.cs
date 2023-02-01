@@ -8,7 +8,7 @@ using Romanesco.DataModel.Entities;
 
 namespace Romanesco.Host2.ViewModels;
 
-public class NamedClassViewModel : IDataViewModel
+public class NamedClassViewModel : IDataViewModel, INamedArrayItem
 {
     private readonly Subject<Unit> _openDetailSubject = new ();
     public string Title { get; }
@@ -16,6 +16,9 @@ public class NamedClassViewModel : IDataViewModel
     public PropertyViewModel[] Children { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
     public ClassIdProvider? IdProvider { get; }
+
+    public IReadOnlyReactiveProperty<string> EntryName { get; }
+    public IDataViewModel Data => this;
 
     public NamedClassViewModel(NamedClassModel model, IViewModelFactory factory)
     {
@@ -33,6 +36,7 @@ public class NamedClassViewModel : IDataViewModel
 
         Title = model.Title;
         IdProvider = model.Inner.IdProvider;
+        EntryName = model.EntryName;
     }
 
     public void Edit()

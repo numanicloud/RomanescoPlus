@@ -14,18 +14,18 @@ internal class NamedArrayViewModel : IDataViewModel
     private readonly Subject<Unit> _openDetailSubject = new();
     private readonly Subject<Unit> _closeDetailSubject = new();
 
-    public ReadOnlyReactiveCollection<NamedArrayItemViewModel> Items { get; }
+    public ReadOnlyReactiveCollection<INamedArrayItem> Items { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
     public string Title => _model.Title;
     public IObservable<Unit> OpenDetail => _openDetailSubject;
     public EditorCommand[] EditorCommands { get; init; } = Array.Empty<EditorCommand>();
     
     public ReactiveCommand NewCommand { get; } = new();
-    public ReactiveCommand<NamedArrayItemViewModel> RemoveCommand { get; } = new();
-    public ReactiveCommand<NamedArrayItemViewModel> MoveUpCommand { get; } = new();
-    public ReactiveCommand<NamedArrayItemViewModel> MoveDownCommand { get; } = new();
-    public ReactiveCommand<NamedArrayItemViewModel> DuplicateCommand { get; } = new();
-    public ReactiveProperty<NamedArrayItemViewModel?> SelectedItem { get; } = new();
+    public ReactiveCommand<INamedArrayItem> RemoveCommand { get; } = new();
+    public ReactiveCommand<INamedArrayItem> MoveUpCommand { get; } = new();
+    public ReactiveCommand<INamedArrayItem> MoveDownCommand { get; } = new();
+    public ReactiveCommand<INamedArrayItem> DuplicateCommand { get; } = new();
+    public ReactiveProperty<INamedArrayItem?> SelectedItem { get; } = new();
 
     public NamedArrayViewModel(ArrayModel model, IViewModelFactory factory)
     {
@@ -34,14 +34,28 @@ internal class NamedArrayViewModel : IDataViewModel
         Items = model.Items
             .ToReadOnlyReactiveCollection(x =>
             {
-                if (x is not ClassModel cm) throw new Exception();
-                if (cm.EntryName is not MutableEntryName name) throw new Exception();
-
-                return new NamedArrayItemViewModel()
+                if (x is ClassModel cm)
                 {
-                    Data = factory.Create(cm, factory),
-                    EntryName = name.Name
-                };
+                    if (cm.EntryName is not MutableEntryName name) throw new Exception();
+
+                    return new NamedArrayItemViewModel()
+                    {
+                        Data = factory.Create(cm, factory),
+                        EntryName = name.Name
+                    } as INamedArrayItem;
+                }
+                else if (x is NamedClassModel ncm)
+                {
+                    return new NamedArrayItemViewModel()
+                    {
+                        Data = factory.Create(ncm.Inner, factory),
+                        EntryName = ncm.EntryName
+                    };
+                }
+                else
+                {
+                    throw new Exception();
+                }
             });
 
         DetailedData = SelectedItem
@@ -62,7 +76,7 @@ internal class NamedArrayViewModel : IDataViewModel
         _model.New();
     }
 
-    public void Remove(NamedArrayItemViewModel item)
+    public void Remove(INamedArrayItem item)
     {
         _model.RemoveAt(Items.IndexOf(item));
         if (item == SelectedItem.Value)
@@ -71,19 +85,19 @@ internal class NamedArrayViewModel : IDataViewModel
         }
     }
 
-    public void MoveUp(NamedArrayItemViewModel item)
+    public void MoveUp(INamedArrayItem item)
     {
         var index = Items.IndexOf(item);
         _model.Move(index, index - 1);
     }
 
-    public void MoveDown(NamedArrayItemViewModel item)
+    public void MoveDown(INamedArrayItem item)
     {
         var index = Items.IndexOf(item);
         _model.Move(index, index + 1);
     }
 
-    public void Duplicate(NamedArrayItemViewModel item)
+    public void Duplicate(INamedArrayItem item)
     {
         var index = Items.IndexOf(item);
         _model.Duplicate(index);
@@ -95,8 +109,14 @@ internal class NamedArrayViewModel : IDataViewModel
     }
 }
 
-internal class NamedArrayItemViewModel
+internal class NamedArrayItemViewModel : INamedArrayItem
 {
     public required IReadOnlyReactiveProperty<string> EntryName { get; init; }
     public required IDataViewModel Data { get; init; }
+}
+
+internal interface INamedArrayItem
+{
+    IReadOnlyReactiveProperty<string> EntryName { get; }
+    IDataViewModel Data { get; }
 }

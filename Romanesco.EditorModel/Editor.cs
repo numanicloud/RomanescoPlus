@@ -19,15 +19,17 @@ public class Editor : IEditorCommandObserver
 
     public Editor()
     {
+        var classFactory = new ClassFactory
+        {
+            CommandObserver = this
+        };
         _modelFactory = new AggregatedFactory
         {
-            ClassFactory = new ClassFactory
-            {
-                CommandObserver = this
-            },
+            ClassFactory = classFactory,
             Factories = new IModelFactory[]
             {
                 new PrimitiveFactory(),
+                new NamedClassFactory(classFactory),
                 new ArrayFactory()
             }
         };

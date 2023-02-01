@@ -4,7 +4,7 @@ using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Factories;
 
-internal class NamedClassFactory : IModelFactory
+public class NamedClassFactory : IModelFactory
 {
     private readonly ClassFactory _classFactory;
 
@@ -17,15 +17,7 @@ internal class NamedClassFactory : IModelFactory
     {
         if (_classFactory.LoadType(title, type, loader) is not ClassModel cm) return null;
 
-        var nameProperty = cm.Children.FirstOrDefault(x =>
-            x.Attributes.Any(attr => attr.Data is EditorNameAttribute));
-        if (nameProperty?.Model is not StringModel str) return null;
-
-        return new NamedClassModel()
-        {
-            Inner = cm,
-            EntryName = str.Data
-        };
+        return NamedClassModel.Create(cm);
     }
 
     public IDataModel? LoadValue(IDataModel target, SerializedData data, IModelFactory loader)
@@ -35,15 +27,7 @@ internal class NamedClassFactory : IModelFactory
         if (loader.LoadValue(model.Inner, data, loader) is not ClassModel inner)
             return null;
 
-        var nameProperty = inner.Children.FirstOrDefault(x =>
-            x.Attributes.Any(attr => attr.Data is EditorNameAttribute));
-        if (nameProperty?.Model is not StringModel str) return null;
-
-        return new NamedClassModel()
-        {
-            Inner = inner,
-            EntryName = str.Data,
-        };
+        return NamedClassModel.Create(inner);
     }
 
     public SerializedData? MakeData(IDataModel model, IModelFactory factory)

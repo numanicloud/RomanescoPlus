@@ -112,6 +112,44 @@ public class NamedClassTest
             .Type<StringModel>()
             .AreEqual("First", x => x.Data.Value);
     }
+
+    [Test]
+    public void 名前プロパティの値が変わると通知される()
+    {
+        var model = _aggregatedFactory!.LoadType(typeof(SimpleNamedSubject));
+
+        if (model is not NamedClassModel { Inner.Children: [ { Model: StringModel str } ] } named)
+        {
+            throw FailWithTestRequirement();
+        }
+
+        string notified = "";
+        using var subscription = named.EntryName
+            .Subscribe(x => notified = x);
+
+        str.Data.Value = "NewString";
+
+        Assert.That(notified, Is.EqualTo("NewString"));
+    }
+
+    [Test]
+    public void Cloneしても名前プロパティの値が変わると通知される()
+    {
+        var model = _aggregatedFactory!.LoadType(typeof(SimpleNamedSubject)).Clone();
+
+        if (model is not NamedClassModel { Inner.Children: [ { Model: StringModel str } ] } named)
+        {
+            throw FailWithTestRequirement();
+        }
+
+        string notified = "";
+        using var subscription = named.EntryName
+            .Subscribe(x => notified = x);
+
+        str.Data.Value = "NewString";
+
+        Assert.That(notified, Is.EqualTo("NewString"));
+    }
     
     private static Exception FailWithTestRequirement()
     {
