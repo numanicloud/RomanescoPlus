@@ -37,16 +37,16 @@ public class ClassFactory : IModelFactory
         array.ToList()
             .ForEach(item =>
             {
-                if (item.Model is ArrayModel { Prototype: ClassModel prototype } masterProperty)
+                if (item.Model is ArrayModel { Prototype: NamedClassModel prototype } masterProperty)
                 {
                     var attr = item.Attributes.Select(x => x.Data)
                         .OfType<EditorMasterAttribute>()
                         .FirstOrDefault();
                     if (attr == null) return;
 
-                    prototype.IdProvider = new ClassIdProvider()
+                    prototype.Inner.IdProvider = new ClassIdProvider()
                     {
-                        Self = prototype,
+                        Self = prototype.Inner,
                         PropertyName = attr.IdPropertyName,
                     };
                 }

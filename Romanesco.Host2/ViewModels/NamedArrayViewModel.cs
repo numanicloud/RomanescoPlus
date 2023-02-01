@@ -46,11 +46,12 @@ internal class NamedArrayViewModel : IDataViewModel
                 }
                 else if (x is NamedClassModel ncm)
                 {
-                    return new NamedArrayItemViewModel()
+                    var t = new NamedArrayItemViewModel()
                     {
                         Data = factory.Create(ncm.Inner, factory),
                         EntryName = ncm.EntryName
                     };
+                    return t;
                 }
                 else
                 {
