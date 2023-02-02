@@ -35,23 +35,12 @@ internal class NamedArrayViewModel : IDataViewModel
             .ToReadOnlyReactiveCollection(x =>
             {
                 if (x is ClassModel cm)
-                {
-                    if (cm.EntryName is not MutableEntryName name) throw new Exception();
+                    throw new NotImplementedException();
 
-                    return new NamedArrayItemViewModel()
-                    {
-                        Data = factory.Create(cm, factory),
-                        EntryName = name.Name
-                    } as INamedArrayItem;
-                }
-                else if (x is NamedClassModel ncm)
-                {
-                    return new NamedClassViewModel(ncm, factory);
-                }
-                else
-                {
-                    throw new Exception();
-                }
+                if (x is NamedClassModel ncm)
+                    return new NamedClassViewModel(ncm, factory) as INamedArrayItem;
+
+                throw new Exception();
             });
 
         DetailedData = SelectedItem

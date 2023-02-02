@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Reactive.Bindings;
-using Romanesco.DataModel.Factories;
 using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Entities.Component;
@@ -29,24 +28,15 @@ public class EditorCommand
         Observer.RunCommand(this);
     }
 
-    public void Run(Assembly assembly, IModelFactory factory)
+    public EditorCommand With(IDataModel data)
     {
-        var type = assembly.GetType(HostType.Name);
-        if (type is null) return;
-
-        var propType = type.GetProperty(Data.Title)?.PropertyType;
-        if (propType is null) return;
-
-        var method = type.GetMethod(MethodName);
-        if (method is null) return;
-
-        var argument = factory.Decode(Data, propType, factory);
-        if (argument is null) return;
-
-        var result = method.Invoke(type, new[] { argument });
-        if (result is null) return;
-
-        factory.LoadRawValue(Data, result, factory);
+        return new EditorCommand()
+        {
+            HostType = HostType,
+            MethodName = MethodName,
+            Data = data,
+            Observer = Observer
+        };
     }
 
     public static EditorCommand[] ExtractCommands(

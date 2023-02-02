@@ -74,7 +74,8 @@ public class ClassFactory : IModelFactory
                     ? new PropertyModel()
                     {
                         Attributes = x.Attributes,
-                        Model = child
+                        Model = child,
+                        Commands = x.Commands.Select(cmd => cmd.With(child)).ToArray()
                     }
                     : x.Clone())
                 .ToArray(),
