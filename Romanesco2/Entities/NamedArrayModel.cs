@@ -1,49 +1,50 @@
-﻿namespace Romanesco.DataModel.Entities;
+﻿using Romanesco.DataModel.Entities.Component;
+
+namespace Romanesco.DataModel.Entities;
 
 public class NamedArrayModel : IDataModel
 {
-    // 中身がNamedArrayModelであることが保証できるのだから、ArrayModel型で覆い隠すのは実際の型を分かりづらくするだけ
-    public ArrayModel Inner { get; }
-
-    public string Title => Inner.Title;
-
-    public NamedArrayModel(ArrayModel inner)
-    {
-        if (inner.Prototype is not NamedClassModel)
-        {
-            throw new InvalidOperationException();
-        }
-
-        Inner = inner;
-    }
+    public required ModelCollection<NamedClassModel> Inner { get; init; }
+    public required string Title { get; init; }
 
     public IDataModel Clone(string? title = null)
     {
-        return new NamedArrayModel(Inner.Clone(title) as ArrayModel ?? throw new Exception());
+        var result = new NamedArrayModel()
+        {
+            Inner = new ModelCollection<NamedClassModel>()
+            {
+                Prototype = Inner.Prototype,
+                ElementType = Inner.ElementType,
+            },
+            Title = Title
+        };
+
+        foreach (var item in Inner.Items)
+        {
+            result.Inner.Add(item.Clone() as NamedClassModel ?? throw new Exception());
+        }
+
+        return result;
     }
 
-    public void New()
-    {
-        Inner.New();
-    }
+    public NamedClassModel New() => Inner.New($"Item({Title})");
 
-    public void Remove(NamedClassModel item)
-    {
-        throw new NotImplementedException();
-    }
+    public void Remove(NamedClassModel item) => Inner.RemoveAt(Inner.Items.IndexOf(item));
 
     public void MoveUp(NamedClassModel item)
     {
-        throw new NotImplementedException();
+        var index = Inner.Items.IndexOf(item);
+        Inner.Move(index, index - 1);
     }
 
     public void MoveDown(NamedClassModel item)
     {
-        throw new NotImplementedException();
+        var index = Inner.Items.IndexOf(item);
+        Inner.Move(index, index + 1);
     }
 
     public void Duplicate(NamedClassModel item)
     {
-        throw new NotImplementedException();
+        Inner.Duplicate(Inner.Items.IndexOf(item));
     }
 }

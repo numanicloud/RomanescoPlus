@@ -1,10 +1,9 @@
 ﻿using System.Reactive.Concurrency;
 using Reactive.Bindings;
-using Romanesco.DataModel.Entities.Component;
 using Romanesco.DataModel.Factories;
 using Romanesco.DataModel.Serialization;
 
-namespace Romanesco.DataModel.Entities;
+namespace Romanesco.DataModel.Entities.Component;
 
 public class ModelCollection<T> where T : class, IDataModel
 {

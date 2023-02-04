@@ -7,12 +7,12 @@ namespace Romanesco.DataModel.Entities;
 
 public class ArrayModel : IDataModel
 {
+    public required ModelCollection<IDataModel> Delegation { get; init; }
     public required string Title { get; init; }
     public ReadOnlyReactiveCollection<IDataModel> Items => Delegation.Items;
     public IDataModel Prototype => Delegation.Prototype;
     public TypeId ElementType => Delegation.ElementType;
 
-    public required ModelCollection<IDataModel> Delegation { get; init; }
 
     public IDataModel New() => Delegation.New($"Item({Title})");
 
