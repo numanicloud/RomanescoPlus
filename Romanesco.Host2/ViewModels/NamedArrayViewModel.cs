@@ -10,7 +10,7 @@ namespace Romanesco.Host2.ViewModels;
 
 internal class NamedArrayViewModel : IDataViewModel
 {
-    private readonly ArrayModel _model;
+    private readonly NamedArrayModel _model;
     private readonly Subject<Unit> _openDetailSubject = new();
     private readonly Subject<Unit> _closeDetailSubject = new();
 
@@ -27,26 +27,18 @@ internal class NamedArrayViewModel : IDataViewModel
     public ReactiveCommand<INamedArrayItem> DuplicateCommand { get; } = new();
     public ReactiveProperty<INamedArrayItem?> SelectedItem { get; } = new();
 
-    public NamedArrayViewModel(ArrayModel model, IViewModelFactory factory)
+    public NamedArrayViewModel(NamedArrayModel model, IViewModelFactory factory)
     {
         _model = model;
 
-        Items = model.Items
+        Items = model.Inner.Items
             .ToReadOnlyReactiveCollection(x =>
-            {
-                if (x is ClassModel cm)
-                    throw new NotImplementedException();
-
-                if (x is NamedClassModel ncm)
-                    return new NamedClassViewModel(ncm, factory) as INamedArrayItem;
-
-                throw new Exception();
-            });
+                new NamedClassViewModel(x, factory) as INamedArrayItem);
 
         DetailedData = SelectedItem
             .Where(x => x is not null)
-            .Select(x => x?.Data)
-            .Merge(_closeDetailSubject.Select(x => new NoneViewModel()))
+            .Select(x => x?.ViewModel)
+            .Merge<IDataViewModel?>(_closeDetailSubject.Select(x => new NoneViewModel()))
             .ToReadOnlyReactiveProperty()!;
 
         NewCommand.Subscribe(New);
@@ -63,45 +55,24 @@ internal class NamedArrayViewModel : IDataViewModel
 
     public void Remove(INamedArrayItem item)
     {
-        _model.RemoveAt(Items.IndexOf(item));
+        _model.Remove(item.ViewModel.Model);
         if (item == SelectedItem.Value)
         {
             _closeDetailSubject.OnNext(Unit.Default);
         }
     }
 
-    public void MoveUp(INamedArrayItem item)
-    {
-        var index = Items.IndexOf(item);
-        _model.Move(index, index - 1);
-    }
+    public void MoveUp(INamedArrayItem item) => _model.MoveUp(item.ViewModel.Model);
 
-    public void MoveDown(INamedArrayItem item)
-    {
-        var index = Items.IndexOf(item);
-        _model.Move(index, index + 1);
-    }
+    public void MoveDown(INamedArrayItem item) => _model.MoveDown(item.ViewModel.Model);
 
-    public void Duplicate(INamedArrayItem item)
-    {
-        var index = Items.IndexOf(item);
-        _model.Duplicate(index);
-    }
+    public void Duplicate(INamedArrayItem item) => _model.Duplicate(item.ViewModel.Model);
 
-    public void Edit()
-    {
-        _openDetailSubject.OnNext(Unit.Default);
-    }
-}
-
-internal class NamedArrayItemViewModel : INamedArrayItem
-{
-    public required IReadOnlyReactiveProperty<string> EntryName { get; init; }
-    public required IDataViewModel Data { get; init; }
+    public void Edit() => _openDetailSubject.OnNext(Unit.Default);
 }
 
 internal interface INamedArrayItem
 {
     IReadOnlyReactiveProperty<string> EntryName { get; }
-    IDataViewModel Data { get; }
+    NamedClassViewModel ViewModel { get; }
 }

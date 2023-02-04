@@ -26,7 +26,7 @@ internal class IntIdReferenceViewModel : IDataViewModel
         Master = master;
 
         SelectedItem.FilterNull()
-            .Select(x => x.Data)
+            .Select(x => x.ViewModel)
             .OfType<NamedClassViewModel>()
             .Select(x => x.IdProvider?.IdModel)
             .FilterNull()
@@ -38,8 +38,8 @@ internal class IntIdReferenceViewModel : IDataViewModel
             if (m is InitializedMasterData initialized)
             {
                 SelectedItem.Value = initialized.Choices
-                    .FirstOrDefault(x => x.Data is NamedClassViewModel vm
-                        && vm.IdProvider?.IdModel.Data.Value == model.Data.Value);
+                    .FirstOrDefault(x =>
+                        x.ViewModel.IdProvider?.IdModel.Data.Value == model.Data.Value);
             }
         });
     }

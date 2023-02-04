@@ -39,14 +39,11 @@ internal class ViewModelFactory : IViewModelFactory
 
         return model.Model switch
         {
-            ArrayModel { Prototype: NamedClassModel } namedArray2 =>
-                InstantiateNamedArray(namedArray2),
-            ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } namedArray =>
-                InstantiateNamedArray(namedArray),
+            NamedArrayModel namedArray2 => InstantiateNamedArray(namedArray2),
             _ => Create(model.Model, factory)
         };
 
-        NamedArrayViewModel InstantiateNamedArray(ArrayModel namedArray)
+        NamedArrayViewModel InstantiateNamedArray(NamedArrayModel namedArray)
         {
             var vm = new NamedArrayViewModel(namedArray, factory)
             {
@@ -76,8 +73,6 @@ internal class ViewModelFactory : IViewModelFactory
             BoolModel boolModel => new BoolViewModel { Model = boolModel },
             NamedClassModel namedClass => new NamedClassViewModel(namedClass, factory),
             ClassModel classModel => new ClassViewModel(classModel, factory),
-            ArrayModel { Prototype: ClassModel { EntryName: MutableEntryName } } arrayModel =>
-                new NamedArrayViewModel(arrayModel, factory),
             ArrayModel arrayModel => new ArrayViewModel(arrayModel, factory),
             _ => new NoneViewModel()
         };

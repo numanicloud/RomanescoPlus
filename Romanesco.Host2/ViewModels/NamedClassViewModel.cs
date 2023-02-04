@@ -18,7 +18,8 @@ public class NamedClassViewModel : IDataViewModel, INamedArrayItem
     public ClassIdProvider? IdProvider { get; }
 
     public IReadOnlyReactiveProperty<string> EntryName { get; }
-    public IDataViewModel Data => this;
+    public NamedClassViewModel ViewModel => this;
+    public NamedClassModel Model { get; }
 
     public NamedClassViewModel(NamedClassModel model, IViewModelFactory factory)
     {
@@ -37,6 +38,7 @@ public class NamedClassViewModel : IDataViewModel, INamedArrayItem
         Title = model.Title;
         IdProvider = model.Inner.IdProvider;
         EntryName = model.EntryName;
+        Model = model;
     }
 
     public void Edit()

@@ -4,7 +4,7 @@ using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Factories;
 
-internal class NamedArrayFactory : IModelFactory
+public class NamedArrayFactory : IModelFactory
 {
     public IDataModel? LoadType(string title, Type type, IModelFactory loader)
     {
@@ -14,13 +14,18 @@ internal class NamedArrayFactory : IModelFactory
         }
 
         var prototype = loader.LoadType($"Prototype({title})", elementType, loader);
+        if (prototype is not NamedClassModel proto)
+        {
+            return null;
+        }
+
         return new NamedArrayModel()
         {
             Title = title,
             Inner = new ModelCollection<NamedClassModel>()
             {
                 ElementType = new TypeId(elementType),
-                Prototype = prototype as NamedClassModel ?? throw new Exception()
+                Prototype = proto
             }
         };
     }
