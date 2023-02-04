@@ -11,12 +11,17 @@ public class ArrayFactory : IModelFactory
     {
         if (!type.IsArray || type.GetElementType() is not { } elementType) return null;
 
+        var prototype = loader.LoadType($"Prototype({title})", elementType, loader)
+            ?? throw new Exception();
+        var typeId = new TypeId(elementType);
         return new ArrayModel()
         {
             Title = title,
-            Prototype = loader.LoadType($"Prototype({title})", elementType, loader)
-                ?? throw new Exception(),
-            ElementType = new TypeId(elementType)
+            Delegation = new ModelCollection<IDataModel>()
+            {
+                Prototype = prototype,
+                ElementType = typeId,
+            }
         };
     }
 
@@ -25,11 +30,15 @@ public class ArrayFactory : IModelFactory
         if (target is not ArrayModel model
             || data is not SerializedArray serialized) return null;
 
+        var prototype = model.Prototype.Clone();
         var result = new ArrayModel()
         {
             Title = target.Title,
-            Prototype = model.Prototype.Clone(),
-            ElementType = model.ElementType,
+            Delegation = new ModelCollection<IDataModel>()
+            {
+                Prototype = prototype,
+                ElementType = model.ElementType,
+            },
         };
 
         result.Clear();

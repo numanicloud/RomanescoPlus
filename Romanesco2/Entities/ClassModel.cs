@@ -12,7 +12,6 @@ public class ClassModel : IDataModel
 
     public required TypeId TypeId { get; init; }
     public required string Title { get; init; }
-    public IReadOnlyReactiveProperty<string> TextOfValue { get; private init; }
     public EntryName EntryName { get; private init; }
 
     public ClassIdProvider? IdProvider { get; set; }
@@ -23,14 +22,6 @@ public class ClassModel : IDataModel
         init
         {
             _properties = value;
-            TextOfValue = _properties.Select(x => x.Model.TextOfValue)
-                .Merge()
-                .Select(_ =>
-                {
-                    var records = _properties.Select(x => $"{x.Model.Title} = {x.Model.TextOfValue.Value}");
-                    return "{ " + string.Join(", ", records) + " }";
-                })
-                .ToReadOnlyReactiveProperty("");
             EntryName =
                 _properties.FirstOrDefault(x =>
                     x.Attributes.Any(attr => attr.Data is EditorNameAttribute)) is not { Model: StringModel nameModel }
@@ -41,7 +32,6 @@ public class ClassModel : IDataModel
 
     public ClassModel()
     {
-        TextOfValue = new ReactiveProperty<string>();
         EntryName = new NullEntryName();
     }
 

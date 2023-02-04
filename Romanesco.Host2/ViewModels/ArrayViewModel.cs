@@ -31,12 +31,15 @@ public class ArrayViewModel : IDataViewModel
         // デザインデータ
         _model = new ArrayModel()
         {
-            ElementType = new TypeId(typeof(int[])),
-            Prototype = new IntModel()
+            Title = "Design",
+            Delegation = new ModelCollection<IDataModel>()
             {
-                Title = "Item"
-            },
-            Title = "Design"
+                Prototype = new IntModel()
+                {
+                    Title = "Item"
+                },
+                ElementType = new TypeId(typeof(int[])),
+            }
         };
 
         Items = new ReactiveCollection<IDataViewModel>()

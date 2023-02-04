@@ -19,33 +19,4 @@ internal class DataModelTest
 
         Assert.That(model.TextOfValue.Value, Is.EqualTo("12"));
     }
-
-    [Test]
-    public void 子要素が更新されるとクラスの文字列形式に反映される()
-    {
-        var flagModel = new BoolModel()
-        {
-            Title = "Flag",
-            Data = { Value = true }
-        };
-
-        var model = new ClassModel()
-        {
-            TypeId = new TypeId(typeof(DataModelTest)),
-            Children = new[]
-            {
-                new PropertyModel()
-                {
-                    Model = flagModel
-                }
-            },
-            Title = "Root"
-        };
-
-        Assert.That(model.TextOfValue.Value, Is.EqualTo("{ Flag = True }"));
-
-        flagModel.Data.Value = false;
-        
-        Assert.That(model.TextOfValue.Value, Is.EqualTo("{ Flag = False }"));
-    }
 }

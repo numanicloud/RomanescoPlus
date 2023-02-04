@@ -25,8 +25,11 @@ internal static class Model
         var array = new ArrayModel()
         {
             Title = title,
-            Prototype = prototype,
-            ElementType = new TypeId(type)
+            Delegation = new ModelCollection<IDataModel>()
+            {
+                Prototype = prototype,
+                ElementType = new TypeId(type)
+            }
         };
 
         foreach (var action in setup)

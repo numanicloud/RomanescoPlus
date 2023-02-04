@@ -120,31 +120,6 @@ internal class ArrayTest
     }
 
     [Test]
-    public void クラスの配列の要素のメンバーの値を変更すると文字列形式に反映される()
-    {
-        var model = _aggregatedFactory!.LoadType(typeof(ArrayWithComplex));
-
-        if (model is not ClassModel { Children: [ { Model: ArrayModel { Items: [] } array }] })
-        {
-            throw FailWithTestRequirement();
-        }
-
-        var item = array.New();
-        if (item is not ClassModel { Children: [ { Model: IntModel i }, { Model: BoolModel b }] })
-        {
-            throw FailWithTestRequirement();
-        }
-
-        i.Data.Value = 71;
-        b.Data.Value = true;
-
-        Assert.That(model.TextOfValue.Value,
-            Is.EqualTo("""
-                { Objects = [{ X = 71, Flag = True }] }
-                """));
-    }
-
-    [Test]
     public void 配列に値を読み込める()
     {
         var model = Model.Array("List", typeof(int), Model.Int("Item(List)"));
