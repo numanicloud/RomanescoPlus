@@ -37,7 +37,7 @@ public class ClassFactory : IModelFactory
         array.ToList()
             .ForEach(item =>
             {
-                if (item.Model is ArrayModel { Prototype: NamedClassModel prototype } masterProperty)
+                if (item.Model is NamedArrayModel { Inner.Prototype: { } prototype })
                 {
                     var attr = item.Attributes.Select(x => x.Data)
                         .OfType<EditorMasterAttribute>()

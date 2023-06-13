@@ -18,7 +18,7 @@
             <ColumnDefinition Width="1*"/>
           </Grid.ColumnDefinitions>
 
-          <TextBlock Text="{Binding Data.IdProvider.IdModel.Data.Value}"/>
+          <TextBlock Text="{Binding ViewModel.IdProvider.IdModel.Data.Value}"/>
           <TextBlock Text=":" Grid.Column="1" Margin="2,0,2,0"/>
           <TextBlock Text="{Binding EntryName.Value}" Grid.Column="2"/>
         </Grid>
