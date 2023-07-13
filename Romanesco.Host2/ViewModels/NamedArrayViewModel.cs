@@ -14,18 +14,18 @@ internal class NamedArrayViewModel : IDataViewModel
     private readonly Subject<Unit> _openDetailSubject = new();
     private readonly Subject<Unit> _closeDetailSubject = new();
 
-    public ReadOnlyReactiveCollection<INamedArrayItem> Items { get; }
+    public ReadOnlyReactiveCollection<NamedClassViewModel> Items { get; }
     public IReadOnlyReactiveProperty<IDataViewModel> DetailedData { get; }
     public string Title => _model.Title;
     public IObservable<Unit> OpenDetail => _openDetailSubject;
     public EditorCommand[] EditorCommands { get; init; } = Array.Empty<EditorCommand>();
     
     public ReactiveCommand NewCommand { get; } = new();
-    public ReactiveCommand<INamedArrayItem> RemoveCommand { get; } = new();
-    public ReactiveCommand<INamedArrayItem> MoveUpCommand { get; } = new();
-    public ReactiveCommand<INamedArrayItem> MoveDownCommand { get; } = new();
-    public ReactiveCommand<INamedArrayItem> DuplicateCommand { get; } = new();
-    public ReactiveProperty<INamedArrayItem?> SelectedItem { get; } = new();
+    public ReactiveCommand<NamedClassViewModel> RemoveCommand { get; } = new();
+    public ReactiveCommand<NamedClassViewModel> MoveUpCommand { get; } = new();
+    public ReactiveCommand<NamedClassViewModel> MoveDownCommand { get; } = new();
+    public ReactiveCommand<NamedClassViewModel> DuplicateCommand { get; } = new();
+    public ReactiveProperty<NamedClassViewModel?> SelectedItem { get; } = new();
 
     public NamedArrayViewModel(NamedArrayModel model, IViewModelFactory factory)
     {
@@ -33,7 +33,7 @@ internal class NamedArrayViewModel : IDataViewModel
 
         Items = model.Inner.Items
             .ToReadOnlyReactiveCollection(x =>
-                new NamedClassViewModel(x, factory) as INamedArrayItem);
+                new NamedClassViewModel(x, factory));
 
         DetailedData = SelectedItem
             .Where(x => x is not null)
@@ -53,7 +53,7 @@ internal class NamedArrayViewModel : IDataViewModel
         _model.New();
     }
 
-    public void Remove(INamedArrayItem item)
+    public void Remove(NamedClassViewModel item)
     {
         _model.Remove(item.ViewModel.Model);
         if (item == SelectedItem.Value)
@@ -62,17 +62,11 @@ internal class NamedArrayViewModel : IDataViewModel
         }
     }
 
-    public void MoveUp(INamedArrayItem item) => _model.MoveUp(item.ViewModel.Model);
+    public void MoveUp(NamedClassViewModel item) => _model.MoveUp(item.ViewModel.Model);
 
-    public void MoveDown(INamedArrayItem item) => _model.MoveDown(item.ViewModel.Model);
+    public void MoveDown(NamedClassViewModel item) => _model.MoveDown(item.ViewModel.Model);
 
-    public void Duplicate(INamedArrayItem item) => _model.Duplicate(item.ViewModel.Model);
+    public void Duplicate(NamedClassViewModel item) => _model.Duplicate(item.ViewModel.Model);
 
     public void Edit() => _openDetailSubject.OnNext(Unit.Default);
-}
-
-internal interface INamedArrayItem
-{
-    IReadOnlyReactiveProperty<string> EntryName { get; }
-    NamedClassViewModel ViewModel { get; }
 }

@@ -8,7 +8,7 @@ using Romanesco.DataModel.Entities;
 
 namespace Romanesco.Host2.ViewModels;
 
-public class NamedClassViewModel : IDataViewModel, INamedArrayItem
+public class NamedClassViewModel : IDataViewModel
 {
     private readonly Subject<Unit> _openDetailSubject = new ();
     public string Title { get; }

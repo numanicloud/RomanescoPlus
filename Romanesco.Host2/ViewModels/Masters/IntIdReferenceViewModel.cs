@@ -4,7 +4,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 using Romanesco.DataModel;
 using Romanesco.DataModel.Entities;
 
@@ -18,7 +17,7 @@ internal class IntIdReferenceViewModel : IDataViewModel
     public ReadOnlyReactiveProperty<MasterData> Master { get; }
     public string Title => Model.Title;
     public IObservable<Unit> OpenDetail => _openDetailSubject;
-    public ReactiveProperty<INamedArrayItem?> SelectedItem { get; } = new();
+    public ReactiveProperty<NamedClassViewModel?> SelectedItem { get; } = new();
 
     public IntIdReferenceViewModel(IntModel model, ReadOnlyReactiveProperty<MasterData> master)
     {
