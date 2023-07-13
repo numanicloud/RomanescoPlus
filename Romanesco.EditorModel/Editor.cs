@@ -129,28 +129,14 @@ public class Editor : IEditorCommandObserver
 
     public async Task ExportAsAsync()
     {
-        if (CurrentProject.Value is not { } project)
-        {
-            return;
-        }
+        if (CurrentProject.Value is not { DataModel: ClassModel root } project) return;
 
         var path = await View.PickSavePathAsync(project.DefaultSavePath.Value);
-        if (path is null)
-        {
-            return;
-        }
-
-        if (project.DataModel is not ClassModel root)
-        {
-            return;
-        }
+        if (path is null) return;
 
         var assembly = Assembly.LoadFrom(project.DllPath.Value.PathString);
         var type = assembly.GetType(root.TypeId.FullName);
-        if (type is null)
-        {
-            return;
-        }
+        if (type is null) return;
 
         var data = _modelFactory.Decode(project.DataModel, type);
 
