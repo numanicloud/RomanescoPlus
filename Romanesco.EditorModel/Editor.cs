@@ -126,4 +126,35 @@ public class Editor : IEditorCommandObserver
 
         _modelFactory.LoadRawValue(command.Data, result);
     }
+
+    public async Task ExportAsAsync()
+    {
+        if (CurrentProject.Value is not { } project)
+        {
+            return;
+        }
+
+        var path = await View.PickSavePathAsync(project.DefaultSavePath.Value);
+        if (path is null)
+        {
+            return;
+        }
+
+        if (project.DataModel is not ClassModel root)
+        {
+            return;
+        }
+
+        var assembly = Assembly.LoadFrom(project.DllPath.Value.PathString);
+        var type = assembly.GetType(root.TypeId.FullName);
+        if (type is null)
+        {
+            return;
+        }
+
+        var data = _modelFactory.Decode(project.DataModel, type);
+
+        await using var file = path.Create();
+        await JsonSerializer.SerializeAsync(file, data);
+    }
 }

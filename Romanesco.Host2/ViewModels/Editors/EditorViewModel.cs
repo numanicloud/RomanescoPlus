@@ -45,6 +45,8 @@ public class EditorViewModel : ViewModel, IEditorView
 
     public void LoadProjectAsync() => _model.LoadAsync().Forget();
 
+    public void ExportAsync() => _model.ExportAsAsync().Forget();
+
     public async Task<ProjectCreationResult> SetupProjectCreationAsync()
     {
         var vm = new ProjectCreationWizardViewModel();
