@@ -77,10 +77,13 @@
     <ContentControl Grid.Row="1" Content="{Binding Project.Value}">
       <ContentControl.Resources>
         <DataTemplate DataType="{x:Type vm:LoadedProjectViewModel}">
-          <ContentControl Content="{Binding Root}"
-                                    ContentTemplateSelector="{StaticResource TemplateSelector}"
-                                    v:EditorEntry.Layout="Block"
-                                    v:EditorEntry.Trace="ProjectView"/>
+          <ScrollViewer HorizontalScrollBarVisibility="Visible"
+                        VerticalScrollBarVisibility="Disabled">
+            <ContentControl Content="{Binding Root}"
+                            ContentTemplateSelector="{StaticResource TemplateSelector}"
+                            v:EditorEntry.Layout="Block"
+                            v:EditorEntry.Trace="ProjectView"/>
+          </ScrollViewer>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:NullProjectViewModel}">
