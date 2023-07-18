@@ -71,6 +71,7 @@ internal class ViewModelFactory : IViewModelFactory
             StringModel stringModel => new StringViewModel { Model = stringModel },
             FloatModel floatModel => new FloatViewModel { Model = floatModel },
             BoolModel boolModel => new BoolViewModel { Model = boolModel },
+            IntEnumModel intEnumModel => new IntEnumViewModel(intEnumModel),
             NamedClassModel namedClass => new NamedClassViewModel(namedClass, factory),
             ClassModel classModel => new ClassViewModel(classModel, factory),
             ArrayModel arrayModel => new ArrayViewModel(arrayModel, factory),

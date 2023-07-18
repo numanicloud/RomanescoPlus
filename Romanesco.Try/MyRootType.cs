@@ -19,6 +19,8 @@ public class MyRootType
     [EditorReference("Master")]
     public int SampleMasterId { get; set; }
 
+    public MyEnum Enum { get; set; }
+
     public static NamedClass[] ApplyId(NamedClass[] self)
     {
         var constant = self.GroupBy(x => x.Id)
@@ -55,4 +57,9 @@ public class Master
     [EditorName]
     public string Name { get; set; }
     public bool IsEnabled { get; set; }
+}
+
+public enum MyEnum
+{
+    Rat, Cow, Tiger, Rabbit
 }

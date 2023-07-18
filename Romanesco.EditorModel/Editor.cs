@@ -29,6 +29,7 @@ public class Editor : IEditorCommandObserver
             Factories = new IModelFactory[]
             {
                 new PrimitiveFactory(),
+                new EnumFactory(),
                 new NamedArrayFactory(),
                 new NamedClassFactory(classFactory),
                 new ArrayFactory()

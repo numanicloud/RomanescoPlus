@@ -29,6 +29,12 @@
               HorizontalAlignment="Left"/>
   </DataTemplate>
 
+  <DataTemplate DataType="{x:Type vm:IntEnumViewModel}" x:Key="EnumInline">
+    <ComboBox SelectedItem="{Binding SelectedValue.Value}" ItemsSource="{Binding Choices}"
+              Margin="3" Padding="2" Height="25"
+              HorizontalAlignment="Left"/>
+  </DataTemplate>
+
   <DataTemplate DataType="{x:Type vm:ClassViewModel}" x:Key="ClassBlock">
     <v:ClassBlock DataContext="{Binding}"/>
   </DataTemplate>
@@ -71,6 +77,7 @@
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource StringInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource FloatInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource BoolInline}"/>
+      <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource EnumInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource NoneInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ClassInline}"/>
       <v:DataTemplateEntry Priority="0" DataTemplate="{StaticResource ArrayInline}"/>
