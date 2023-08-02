@@ -20,7 +20,7 @@ public class NamedClassModel : IDataModel
     {
         // ViewにはReadOnlyReactivePropertyとしてバインドされているように見えるが、
         // Viewは動的な型を見るので書き換え可能なReactivePropertyを見る
-        return Inner.Clone(title) is ClassModel cm
+        return Inner.CloneStrict(title) is { } cm
             && Create(cm) is { } result
                 ? result
                 : throw new Exception();

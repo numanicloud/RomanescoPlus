@@ -5,7 +5,7 @@ using Romanesco.DataModel.Serialization;
 
 namespace Romanesco.DataModel.Entities;
 
-public class ArrayModel : IDataModel
+public class ArrayModel : IDataModel<ArrayModel>
 {
     public required ModelCollection<IDataModel> Delegation { get; init; }
     public required string Title { get; init; }
@@ -26,9 +26,9 @@ public class ArrayModel : IDataModel
 
     public void Duplicate(int index) => Delegation.Duplicate(index);
 
-    public IDataModel Clone(string? title = null)
+    public ArrayModel CloneStrict(string? title = null)
     {
-        var prototype = Prototype.Clone();
+        var prototype = Prototype.Clone(null);
         var result = new ArrayModel()
         {
             Title = title ?? Title,
@@ -41,7 +41,7 @@ public class ArrayModel : IDataModel
 
         foreach (var child in Items)
         {
-            result.Delegation.Add(child.Clone());
+            result.Delegation.Add(child.Clone(child.Title));
         }
 
         return result;

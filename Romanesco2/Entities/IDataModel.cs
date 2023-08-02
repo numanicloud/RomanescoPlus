@@ -1,7 +1,13 @@
 ﻿namespace Romanesco.DataModel.Entities;
 
+public interface IDataModel<out T> : IDataModel where T : IDataModel<T>
+{
+    T CloneStrict(string? title = null);
+    IDataModel IDataModel.Clone(string? title) => CloneStrict(title);
+}
+
 public interface IDataModel
 {
     string Title { get; }
-    IDataModel Clone(string? title = null);
+    public IDataModel Clone(string? title);
 }

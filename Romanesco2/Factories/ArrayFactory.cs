@@ -30,7 +30,7 @@ public class ArrayFactory : IModelFactory
         if (target is not ArrayModel model
             || data is not SerializedArray serialized) return null;
 
-        var prototype = model.Prototype.Clone();
+        var prototype = model.Prototype.Clone(null);
         var result = new ArrayModel()
         {
             Title = target.Title,

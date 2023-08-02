@@ -47,7 +47,7 @@ public class ModelCollection<T> where T : class, IDataModel
 
     public void Add(SerializedData data, IModelFactory loader)
     {
-        if (loader.LoadValue(Prototype.Clone(), data, loader) is T loaded)
+        if (loader.LoadValue(Prototype.Clone(null), data, loader) is T loaded)
         {
             _items.Add(loaded);
         }
@@ -60,7 +60,7 @@ public class ModelCollection<T> where T : class, IDataModel
 
     public void Duplicate(int index)
     {
-        if (_items[index].Clone() is T cloned)
+        if (_items[index].Clone(null) is T cloned)
         {
             _items.Insert(index + 1, cloned);
         }

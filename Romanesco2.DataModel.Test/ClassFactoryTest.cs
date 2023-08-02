@@ -2,7 +2,6 @@ using Romanesco.DataModel.Entities;
 using Romanesco.DataModel.Factories;
 using Romanesco.DataModel.Serialization;
 using Romanesco.DataModel.Test.Domain;
-using Romanesco.DataModel.Test.Fluent;
 using Romanesco.DataModel.Test.Structural;
 
 namespace Romanesco.DataModel.Test;
@@ -29,9 +28,10 @@ public class ClassFactoryTest
     {
         var data = _aggregatedFactory!.LoadType(typeof(EmptySubject));
 
-        data.OnObject()
+        using var sequence = data.BeginAssertion()
             .NotNull()
-            .AssertType<ClassModel>(a => a.OnSequence(b => b.Children));
+            .Type<ClassModel>()
+            .Sequence(x => x.Children);
     }
 
     [Test]
@@ -145,11 +145,11 @@ public class ClassFactoryTest
 
         var result = _aggregatedFactory!.LoadValue(model, data, _aggregatedFactory);
 
-        result.OnObject()
+        result.BeginAssertion()
             .NotNull()
-            .AssertType<IntModel>(a => a
-                .Do(b => Assert.That(b.Title, Is.EqualTo("Data")))
-                .Do(b => Assert.That(b.Data.Value, Is.EqualTo(18))));
+            .Type<IntModel>()
+            .AreEqual("Data", x => x.Title)
+            .AreEqual(18, x => x.Data.Value);
     }
 
     [Test]
@@ -387,10 +387,10 @@ public class ClassFactoryTest
     {
         var model = _aggregatedFactory!.LoadType(typeof(NotAutoImplement));
 
-        model.OnObject()
+        using var sequence = model.BeginAssertion()
             .NotNull()
-            .AssertType<ClassModel>(a => a
-                .OnSequence(b => b.Children));
+            .Type<ClassModel>()
+            .Sequence(x => x.Children);
     }
 
     // テストデータ

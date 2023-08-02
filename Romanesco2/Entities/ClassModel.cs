@@ -6,7 +6,7 @@ using RomanescoPlus.Annotations;
 
 namespace Romanesco.DataModel.Entities;
 
-public class ClassModel : IDataModel
+public class ClassModel : IDataModel<ClassModel>
 {
     private readonly PropertyModel[] _properties = Array.Empty<PropertyModel>();
 
@@ -35,7 +35,7 @@ public class ClassModel : IDataModel
         EntryName = new NullEntryName();
     }
 
-    public IDataModel Clone(string? title)
+    public ClassModel CloneStrict(string? title)
     {
         var result = new ClassModel()
         {

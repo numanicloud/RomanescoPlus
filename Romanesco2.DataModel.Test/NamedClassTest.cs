@@ -135,7 +135,7 @@ public class NamedClassTest
     [Test]
     public void Cloneしても名前プロパティの値が変わると通知される()
     {
-        var model = _aggregatedFactory!.LoadType(typeof(SimpleNamedSubject)).Clone();
+        var model = _aggregatedFactory!.LoadType(typeof(SimpleNamedSubject)).Clone(null);
 
         if (model is not NamedClassModel { Inner.Children: [ { Model: StringModel str } ] } named)
         {

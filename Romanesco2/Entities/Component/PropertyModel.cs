@@ -11,7 +11,7 @@ public class PropertyModel
         return new PropertyModel()
         {
             Attributes = Attributes.ToArray(),
-            Model = Model.Clone(),
+            Model = Model.Clone(null),
             Commands = Commands.ToArray(),
         };
     }
